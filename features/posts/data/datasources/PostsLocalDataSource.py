@@ -9,6 +9,6 @@ class PostsLocalDataSource(LocalDataSource):
             posts = [PostModel(**e) for e in jsonData["data"]]
         return posts
 
-    def dumpLocalsPosts(posts: list[PostModel]):
+    def dumpLocalPosts(posts: list[PostModel]):
         with open("test/post_fixtures.txt", "w") as f:
             json.dump({"data": [e.dict() for e in posts]},f)

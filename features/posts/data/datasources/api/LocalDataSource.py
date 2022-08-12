@@ -8,5 +8,5 @@ class LocalDataSource(ABC):
         pass
 
     @abstractclassmethod
-    def dumpLocalsPosts(posts: list[PostModel]):
+    def dumpLocalPosts(posts: list[PostModel]):
         pass

@@ -12,4 +12,4 @@ class UserPostController(PostController):
        return self.localDatasource.getLocalPosts()
 
     def dumpPosts(self,posts: list[PostModel]):
-        self.localDatasource.dumpLocalsPosts(posts)
+        self.localDatasource.dumpLocalPosts(posts)
