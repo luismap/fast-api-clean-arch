@@ -7,5 +7,5 @@ class Post(BaseModel):
     id: int = -99
     title: str
     content: str
-    published: bool = True
+    published: bool = False
     rating: Optional[int] = None
