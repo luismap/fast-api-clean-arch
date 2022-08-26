@@ -1,6 +1,6 @@
 
 import imp
-from features.posts.data.datasources.PostsLocalDataSource import PostsLocalDataSource
+from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
 

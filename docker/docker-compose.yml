@@ -1,0 +1,30 @@
+version: "3.8" ##optional
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-apidev
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - "TZ=Europe/Stockholm"
+      - "POSTGRES_USER=admin"
+      - "POSTGRES_PASSWORD=admin"
+    volumes:
+      - "./sql:/docker-entrypoint-initdb.d"
+      - local_pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin-apidev
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: luismap2508@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  local_pgdata:
+  pgadmin-data:

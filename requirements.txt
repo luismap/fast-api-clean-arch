@@ -2,3 +2,4 @@ fastapi
 uvicorn[standard]
 PyYAML
 pydantic
+psycopg[binary]
