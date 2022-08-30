@@ -1,5 +1,6 @@
 from abc import ABC, abstractclassmethod
 from features.posts.data.models.PostModel import PostModel
+from features.posts.domain.entities.Post import Post
 
 
 class PostController(ABC):
@@ -12,7 +13,7 @@ class PostController(ABC):
         pass
 
     @abstractclassmethod
-    def getPost() -> PostModel:
+    def getPost(id: int) -> PostModel:
         pass
 
     @abstractclassmethod
@@ -20,9 +21,9 @@ class PostController(ABC):
         pass
 
     @abstractclassmethod
-    def updatePost(post: PostModel) -> bool:
+    def updatePost(id: int, post: PostModel) -> bool:
         pass
 
     @abstractclassmethod
-    def deletePost(postId: int ) -> bool:
+    def deletePost(postId: int ) -> PostModel:
         pass

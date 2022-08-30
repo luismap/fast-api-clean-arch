@@ -1,14 +1,18 @@
 
 import imp
-from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
+import logging
+from core.utils.MyUtils import MyUtils
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
 
 class GetPostsById:
     def __init__(self, postCtrl: PostController) -> None:
-       self.postController = postCtrl
+        appProps = MyUtils.loadProperties("general")["app"]
+        self.postController = postCtrl
+        self.appProps = MyUtils.loadProperties("general")["app"]
+        self.logger = logging.getLogger(appProps["logger"])
     
     def getPostById(self,id: int) -> PostModel:
-        data = self.postController.getPosts()
-        post = filter(lambda p: p.id == id, data)
-        return post
+        data = self.postController.getPost(id)
+        self.logger.info(f"for id {id} got content {data} ")
+        return data

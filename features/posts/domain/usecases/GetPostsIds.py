@@ -9,5 +9,4 @@ class GetPostsIds:
 
     def getPostsIds(self) -> list[int]:
         data: list[PostModel] = self.postCtrl.getPosts()
-        print(data)
         return [e.id for e in data]
