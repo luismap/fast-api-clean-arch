@@ -1,0 +1,16 @@
+---
+#postgres info
+postgres:
+  posts:
+    db: fast_api
+    table: posts
+
+#general
+general:
+  app:
+    env: dev #dev/test/uat/prod
+    logger: api-dev
+
+#local store
+localStore:
+  dbFileName: test/post_fixtures.txt

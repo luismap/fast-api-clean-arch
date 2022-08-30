@@ -1,0 +1,3 @@
+# fast api demo application
+## Dependencies
+* python 3.9
