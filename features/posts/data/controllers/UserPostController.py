@@ -39,8 +39,8 @@ class UserPostController(PostController):
     def updatePost(self,id: int, post: PostModel) -> bool:
         try:
             return self.activeDS.updatePost(id, post)
-        except:
-            self.logger.info(f"error updating post {id}")
+        except Exception as ex:
+            self.logger.info(f"error updating post {id}: {ex}")
 
          
 
