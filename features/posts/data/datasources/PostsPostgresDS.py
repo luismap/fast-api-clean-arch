@@ -52,11 +52,28 @@ class PostsPostgresDS(DataSource):
                     raise IdNotFound(id)
                 return PostModel(**row)
 
-    def createPost(post: PostModel) -> bool:
-        pass
+    def createPost(self, post: PostModel) -> bool:
+        with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"""
+                INSERT INTO {self.db}.{self.table} (title, content, published, rating)
+                values(%s,%s,%s,%s)
+                """,(post.title, post.content, post.published, post.rating))
 
-    def updatePost(post: PostModel) -> bool:
-        pass
+        return True
+
+        
+
+    def updatePost(self,id: int, post: PostModel) -> bool:
+        with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                cur.execute(f"""
+                UPDATE {self.db}.{self.table}
+                SET title= %s, content = %s, published= %s, rating = %s
+                WHERE id = {id}
+                """,(post.title, post.content, post.published, post.rating))
+
+        return True
 
     def deletePost(postId: int ) -> bool:
         pass
