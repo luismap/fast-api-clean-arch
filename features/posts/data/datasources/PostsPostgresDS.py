@@ -53,6 +53,7 @@ class PostsPostgresDS(DataSource):
                 return PostModel(**row)
 
     def createPost(self, post: PostModel) -> bool:
+        #tbe with correct boolean logic
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
                 cur.execute(f"""
@@ -66,6 +67,9 @@ class PostsPostgresDS(DataSource):
 
     def updatePost(self,id: int, post: dict) -> bool:
         lookedPost = self.getPost(id)
+        if lookedPost == None:
+            return False
+
         lookedPost.update(post)
 
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
@@ -81,7 +85,7 @@ class PostsPostgresDS(DataSource):
     def deletePost(self, postId: int ) -> bool:
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
-                post = self.getPost(postId)
+                post = self.getPost(postId) #check post exists
                 if post:
                     cur.execute(f"""
                         DELETE FROM {self.db}.{self.table}
@@ -90,4 +94,7 @@ class PostsPostgresDS(DataSource):
                 else:
                     return False
                 self.logger.info(f"[deleting] post {post}")
-        return True
+        uPost = self.getPost(postId) #check post deleted
+        if uPost == None:
+            return True
+        return False

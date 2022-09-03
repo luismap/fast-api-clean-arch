@@ -8,7 +8,7 @@ class UpdatePosts:
     def __init__(self, postCtrl: PostController) -> None:
         self.postController = postCtrl
 
-    def update(self, id: int, post: dict) -> list[int]:
+    def update(self, id: int, post: dict) -> bool:
         ans = self.postController.updatePost(id, post)
-        return {"updated": ans }
+        return ans
 
