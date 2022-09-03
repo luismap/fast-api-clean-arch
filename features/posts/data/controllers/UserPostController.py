@@ -36,12 +36,11 @@ class UserPostController(PostController):
     def createPost(self,post: PostModel) -> bool:
         return self.activeDS.createPost(post)
 
-    def updatePost(self,id: int, post: PostModel) -> bool:
-        try:
+    def updatePost(self,id: int, post: dict) -> bool:
+        #try:
             return self.activeDS.updatePost(id, post)
-        except Exception as ex:
+        #except Exception as ex:
             self.logger.info(f"error updating post {id}: {ex}")
-
          
 
     def deletePost(self, postId: int ) -> PostModel:

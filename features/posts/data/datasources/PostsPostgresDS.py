@@ -49,7 +49,7 @@ class PostsPostgresDS(DataSource):
                 """)
                 row = cur.fetchone()
                 if row == None:
-                    raise IdNotFound(id)
+                    return None
                 return PostModel(**row)
 
     def createPost(self, post: PostModel) -> bool:
@@ -64,16 +64,30 @@ class PostsPostgresDS(DataSource):
 
         
 
-    def updatePost(self,id: int, post: PostModel) -> bool:
+    def updatePost(self,id: int, post: dict) -> bool:
+        lookedPost = self.getPost(id)
+        lookedPost.update(post)
+
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
                 cur.execute(f"""
                 UPDATE {self.db}.{self.table}
                 SET title= %s, content = %s, published= %s, rating = %s
                 WHERE id = {id}
-                """,(post.title, post.content, post.published, post.rating))
+                """,(lookedPost.title, lookedPost.content, lookedPost.published, lookedPost.rating))
 
         return True
 
-    def deletePost(postId: int ) -> bool:
-        pass
+    def deletePost(self, postId: int ) -> bool:
+        with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+                post = self.getPost(postId)
+                if post:
+                    cur.execute(f"""
+                        DELETE FROM {self.db}.{self.table}
+                        WHERE id = %s
+                        """,(postId,))
+                else:
+                    return False
+                self.logger.info(f"[deleting] post {post}")
+        return True

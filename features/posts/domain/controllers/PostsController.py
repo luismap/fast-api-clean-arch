@@ -21,7 +21,7 @@ class PostController(ABC):
         pass
 
     @abstractclassmethod
-    def updatePost(id: int, post: PostModel) -> bool:
+    def updatePost(id: int, post: dict) -> bool:
         pass
 
     @abstractclassmethod

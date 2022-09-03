@@ -52,13 +52,12 @@ class PostsLocalDataSource(DataSource):
         except:
             raise CreatePostError("error creating post")
 
-    def updatePost(self,id: int, post: PostModel) -> bool:
+    def updatePost(self,id: int, post: dict) -> bool:
         posts = self.getPosts()
         toUpdate = [i for i,p in enumerate(posts) if p.id == id]
-        post.id = id
 
         for i in toUpdate:
-            posts[i] = post
+            posts[i].update(post)
 
         self.dumpPosts(posts)
         return True if len(toUpdate) > 0 else False

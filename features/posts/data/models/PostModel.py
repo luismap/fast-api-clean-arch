@@ -1,4 +1,5 @@
+from asyncio.log import logger
 from features.posts.domain.entities.Post import Post
 
 class PostModel(Post):
-    pass
+    """User post model implementation"""
