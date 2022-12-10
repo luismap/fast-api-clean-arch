@@ -1,4 +1,3 @@
-from asyncio.log import logger
 import logging
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
