@@ -2,10 +2,32 @@ from __future__ import annotations
 import logging
 from typing import Optional
 from pydantic import BaseModel
+from typing import Optional
 
-class Post(BaseModel):
-    id: int = -99
+
+class PostBase(BaseModel):
+    """common attributes while creating or reading data."""
     title: str
     content: str
     published: bool = False
     rating: Optional[int] = None
+
+class PostCreate(PostBase):
+    """that inherit from them (so they will have the same attributes),
+     plus any additional data (attributes) needed for creation"""
+    pass
+
+class Post(PostBase):
+    """
+    Pydantic models (schemas) that will be used when reading data,
+     when returning it from the API
+     ex. id - will only be present once the data has been pushed
+    """
+    id: int = -99
+    
+    """
+    tell the Pydantic model to read the data even if it is not a dict, 
+    but an ORM model (or any other arbitrary object with attributes)
+    """
+    class Config:
+        orm_mode = True

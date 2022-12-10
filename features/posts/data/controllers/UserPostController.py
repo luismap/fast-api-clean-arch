@@ -1,5 +1,6 @@
 from asyncio.log import logger
 import logging
+from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.models.PostModel import PostModel
@@ -8,18 +9,27 @@ from core.utils.MyUtils import MyUtils
 
 class UserPostController(PostController):
 
-    def __init__(self) -> None:
-        self.localDS = PostsLocalDataSource()
-        self.postgresDS = PostsPostgresDS()
+    def __init__(self, 
+    localDS: PostsLocalDataSource,
+    postgresDS: PostsPostgresDS,
+    alchemyDS: PostsAlchemyDS
+
+    ) -> None:
+        self.localDS = localDS
+        self.postgresDS = postgresDS
+        self.alchemyDS = alchemyDS
         self.appProps = MyUtils.loadProperties("general")["app"]
         self.appState = self.appProps["env"]
         self.logger = logging.getLogger(self.appProps["logger"])
-        if self.postgresDS.isAvailable():
+        if alchemyDS.isAvailable():
+            self.logger.info("using alchemy DS")
+            self.activeDS = alchemyDS
+        elif postgresDS.isAvailable():
             self.logger.info("using postgres DS")
-            self.activeDS = self.postgresDS 
-        elif self.localDS.isAvailable():
+            self.activeDS = postgresDS 
+        elif localDS.isAvailable():
             self.logger.info("using localDb")
-            self.activeDS = self.localDS
+            self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
     def getPosts(self) -> list[PostModel]:

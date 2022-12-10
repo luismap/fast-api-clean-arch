@@ -3,4 +3,5 @@ uvicorn[standard]
 PyYAML
 pydantic
 psycopg[binary]
+psycopg2
 SQLAlchemy
