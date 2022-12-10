@@ -1,0 +1,25 @@
+{ "data" : [
+    {
+      "id": 1,
+  "title" : "ML",
+  "content": "the beginning",
+  "name": "luis",
+  "published": true,
+  "rating": 3
+},
+{
+  "id": 2,
+  "title" : "Medicine",
+  "content": "ml in medicine",
+  "name": "anna",
+  "published": false,
+  "rating": 5
+},
+{
+  "id": 3,
+  "title" : "ML",
+  "content": "the beginning",
+  "name": "luis",
+  "published": true
+}
+]}
