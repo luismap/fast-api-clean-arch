@@ -1,5 +1,6 @@
 
 from abc import ABC, abstractclassmethod
+from typing import Optional
 from features.posts.data.models.PostModel import PostModel
 
 class DataSource(ABC):
@@ -9,7 +10,7 @@ class DataSource(ABC):
         pass
 
     @abstractclassmethod
-    def getPosts() -> list[PostModel]:
+    def getPosts() -> Optional[list[PostModel]]:
         pass
 
     @abstractclassmethod

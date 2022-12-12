@@ -27,7 +27,7 @@ class PostsPostgresDS(DataSource):
         try:
             with psycopg.connect(**self.connParams) as conn:
                 self.logger.info("connection to postgres successful")
-            return True
+            return False
         except:
             self.logger.info("connect postgres unsuccessful")
             return False

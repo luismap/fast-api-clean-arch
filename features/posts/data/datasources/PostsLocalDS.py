@@ -1,9 +1,11 @@
 import logging
+from typing import Optional
 from core.db.LocalStore import LocalStore
 from core.failures.MyExeptions import CreatePostError
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostModel import PostModel
+from features.posts.domain.entities.Post import PostCreate
 
 class PostsLocalDataSource(DataSource):
     def __init__(self) -> None:
@@ -20,13 +22,20 @@ class PostsLocalDataSource(DataSource):
         self.logger.info(f"is local Db available {isA}")
         return isA
 
-    def getPosts(self) -> list[PostModel]:
+    def getPosts(self) -> Optional[list[PostModel]]:
         postData = self.localStore.getLocalData(self.postFile)
-        posts = [PostModel(**e) for e in postData]
-        return posts
+        self.logger.info(f"got data {postData}")
+        if postData:
+            posts = [PostModel(**e) for e in postData]
+            return posts
+        else:
+            return None
 
-    def dumpPosts(self,posts: list[PostModel]):
+    def dumpPosts(self,posts: list[PostCreate]):
         data = [e.dict() for e in posts]
+        f = lambda e : e.update({'created_at': str(e['created_at'])})
+        list(map((f),data))
+        self.logger.info(f"data to dump {data}")
         self.localStore.dumpLocalData(self.postFile, data)
 
     def getPost(self,id: int) -> PostModel:
@@ -41,10 +50,14 @@ class PostsLocalDataSource(DataSource):
         post = list(filter(lambda p: p.id == id, localPosts))
         return post[0] if len(post) > 0 else None
 
-    def createPost(self,payload: PostModel) -> bool:
+    def createPost(self,payload: PostCreate) -> bool:
         try:
             posts = self.getPosts()
-            newId = max([e.id for e in posts]) + 1
+            if posts:
+                newId = max([e.id for e in posts]) + 1
+            else:
+                newId = 1
+                posts = []
             payload.id = newId
             posts.append(payload)
             self.dumpPosts(posts)

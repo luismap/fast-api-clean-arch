@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
@@ -32,11 +33,11 @@ class UserPostController(PostController):
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
-    def getPosts(self) -> list[PostModel]:
+    def getPosts(self) -> Optional[list[PostModel]]:
         posts = self.activeDS.getPosts()
         return posts
 
-    def dumpPosts(self,posts: list[PostModel]):
+    def dumpPosts(self,posts: list[PostCreate]):
         self.activeDS.dumpPosts(posts)
 
     def getPost(self,id: int) -> PostModel:

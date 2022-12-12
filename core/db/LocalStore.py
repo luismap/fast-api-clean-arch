@@ -28,8 +28,13 @@ class LocalStore:
 
 
     def getLocalData(self,file: str) -> list[dict]:
-         with open(file, "r") as f:
-            return json.load(f)["data"]
+        ans = []
+        with open(file, "r") as f:
+            try:
+                ans = json.load(f)["data"]
+            except:
+                ans = None
+        return ans
     
     def dumpLocalData(self, file: str, posts: list[dict]) -> bool:
         with open(file, "w") as f:

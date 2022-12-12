@@ -12,6 +12,8 @@ class PostBase(BaseModel):
     content: str
     published: bool = False
     rating: Optional[int] = None
+    created_at: datetime = datetime.now()
+    id: int = -99
 
 class PostCreate(PostBase):
     """create a PostCreate that inherit from PostBase (so they will have the same attributes),
@@ -24,8 +26,6 @@ class Post(PostBase):
      when returning it from the API
      ex. id - will only be present once the data has been pushed
     """
-    id: int = -99
-    created_at: datetime
     
     """
     tell the Pydantic model to read the data even if it is not a dict, 
