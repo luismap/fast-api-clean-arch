@@ -27,7 +27,7 @@ class PostsPostgresDS(DataSource):
         try:
             with psycopg.connect(**self.connParams) as conn:
                 self.logger.info("connection to postgres successful")
-            return False
+            return True
         except:
             self.logger.info("connect postgres unsuccessful")
             return False
@@ -39,7 +39,7 @@ class PostsPostgresDS(DataSource):
                 data = cur.fetchall()
                 return [PostModel(**e) for e in data]
     
-    def dumpPosts(posts: list[PostModel]):
+    def dumpPosts(posts: list[PostCreate]):
         pass
 
     def getPost(self, id: int) -> PostModel:
