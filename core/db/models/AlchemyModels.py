@@ -14,6 +14,6 @@ class PostsAlmy(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, unique=False)
     content = Column(String)
-    publish = Column(Boolean, server_default="false")
+    published = Column(Boolean, server_default="false")
     rating = Column(SmallInteger, server_default="0")
-    created_ad = Column(TIMESTAMP, server_default=func.now())
+    created_at = Column(TIMESTAMP, server_default=func.now())
