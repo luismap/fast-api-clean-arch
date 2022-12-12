@@ -3,6 +3,7 @@ import logging
 from typing import Optional
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
 
 class PostBase(BaseModel):
@@ -13,7 +14,7 @@ class PostBase(BaseModel):
     rating: Optional[int] = None
 
 class PostCreate(PostBase):
-    """that inherit from them (so they will have the same attributes),
+    """create a PostCreate that inherit from PostBase (so they will have the same attributes),
      plus any additional data (attributes) needed for creation"""
     pass
 
@@ -24,6 +25,7 @@ class Post(PostBase):
      ex. id - will only be present once the data has been pushed
     """
     id: int = -99
+    created_at: datetime
     
     """
     tell the Pydantic model to read the data even if it is not a dict, 

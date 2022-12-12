@@ -5,6 +5,7 @@ from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
 from core.utils.MyUtils import MyUtils
+from features.posts.domain.entities.Post import PostCreate
 
 class UserPostController(PostController):
 
@@ -42,7 +43,7 @@ class UserPostController(PostController):
         post = self.activeDS.getPost(id)
         return post
 
-    def createPost(self,post: PostModel) -> bool:
+    def createPost(self,post: PostCreate) -> bool:
         return self.activeDS.createPost(post)
 
     def updatePost(self,id: int, post: dict) -> bool:

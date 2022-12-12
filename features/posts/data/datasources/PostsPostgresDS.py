@@ -10,6 +10,8 @@ from psycopg.rows import dict_row
 from core.failures.MyExeptions import IdNotFound
 import yaml
 
+from features.posts.domain.entities.Post import PostCreate
+
 class PostsPostgresDS(DataSource):
 
     def __init__(self) -> None:
@@ -44,15 +46,18 @@ class PostsPostgresDS(DataSource):
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
                 cur.execute(f"""
-                select * from {self.db}.{self.table}
+                select
+                *
+                 from {self.db}.{self.table}
                 where id = {id}::bigint
                 """)
                 row = cur.fetchone()
                 if row == None:
                     return None
+                self.logger.info(f"returned row{row}")
                 return PostModel(**row)
 
-    def createPost(self, post: PostModel) -> bool:
+    def createPost(self, post: PostCreate) -> bool:
         #tbe with correct boolean logic
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
