@@ -18,7 +18,7 @@ class DataSource(ABC):
         pass
     
     @abstractclassmethod
-    def getPost(id: int) -> PostModel:
+    def getPost(id: int) -> Optional[PostModel]:
         pass
 
     @abstractclassmethod
