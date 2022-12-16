@@ -7,7 +7,7 @@ class CreatePostError(Exception):
 class IdNotFound(Exception):
     def __init__(self, id: int, message="id not not found"):
         """
-        Exception raised for errors in the input salary.
+        General exception when id is not found.
 
         Args:
             id (int): input id 

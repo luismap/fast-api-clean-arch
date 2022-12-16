@@ -1,5 +1,6 @@
 from abc import ABC, abstractclassmethod
 from typing import Optional
+from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.entities.Post import Post, PostCreate
 
@@ -18,7 +19,7 @@ class PostController(ABC):
         pass
 
     @abstractclassmethod
-    def createPost(post: PostCreate) -> bool:
+    def createPost(post: PostCreateModel) -> bool:
         pass
 
     @abstractclassmethod

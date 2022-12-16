@@ -4,6 +4,7 @@ from core.db.LocalStore import LocalStore
 from core.failures.MyExeptions import CreatePostError
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
+from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.entities.Post import PostCreate
 
@@ -50,7 +51,7 @@ class PostsLocalDataSource(DataSource):
         post = list(filter(lambda p: p.id == id, localPosts))
         return post[0] if len(post) > 0 else None
 
-    def createPost(self,payload: PostCreate) -> bool:
+    def createPost(self,payload: PostCreateModel) -> bool:
         try:
             posts = self.getPosts()
             if posts:
