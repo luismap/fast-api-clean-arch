@@ -3,6 +3,7 @@ from typing import Optional
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
+from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
 from core.utils.MyUtils import MyUtils
@@ -44,7 +45,7 @@ class UserPostController(PostController):
         post = self.activeDS.getPost(id)
         return post
 
-    def createPost(self,post: PostCreate) -> bool:
+    def createPost(self,post: PostCreateModel) -> bool:
         return self.activeDS.createPost(post)
 
     def updatePost(self,id: int, post: dict) -> bool:

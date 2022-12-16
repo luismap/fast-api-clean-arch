@@ -13,7 +13,6 @@ class PostBase(BaseModel):
     published: bool = False
     rating: Optional[int] = None
     created_at: datetime = datetime.now()
-    id: int = -99
 
 class PostCreate(PostBase):
     """create a PostCreate that inherit from PostBase (so they will have the same attributes),
@@ -33,5 +32,6 @@ class Post(PostBase):
     tell the Pydantic model to read the data even if it is not a dict, 
     but an ORM model (or any other arbitrary object with attributes)
     """
+    id: int = -99
     class Config:
         orm_mode = True
