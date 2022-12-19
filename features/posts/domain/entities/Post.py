@@ -17,6 +17,7 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     """create a PostCreate that inherit from PostBase (so they will have the same attributes),
      plus any additional data (attributes) needed for creation"""
+    id: Optional[int]
     class Config:
         orm_mode = True
 
