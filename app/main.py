@@ -1,4 +1,5 @@
 import imp
+from typing import List
 from fastapi import Body, FastAPI, HTTPException, status
 
 import logging
@@ -12,6 +13,7 @@ from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
+from features.posts.data.models.PostResponseModel import PostResponseModel
 from features.posts.domain.entities.Post import PostCreate
 from features.posts.domain.usecases.CreatePosts import CreatePosts
 from features.posts.domain.usecases.DeletePosts import DeletePost
@@ -52,11 +54,11 @@ def read_root():
     if canlog: logger.info("root got call")
     return {"Hello": "World"}
 
-@app.get("/posts")
+@app.get("/posts", response_model=List[PostResponseModel])
 def get_post():
     parsedData = GetPosts(userPostController).getPosts()
     logger.info(parsedData)
-    return {"posts": parsedData}
+    return parsedData
 
 @app.post("/createpost",status_code=201)
 def create_post(payload: PostCreateModel):
@@ -72,7 +74,7 @@ def get_post():
     logger.info(ids)
     return {"postsIds": ids}
 
-@app.get("/posts/{id}", response_model=PostModel)
+@app.get("/posts/{id}", response_model=PostResponseModel)
 def get_post(id: int):
     logger.info(f"retriving id {id}")
     post = GetPostsById(userPostController).getPostById(id)
