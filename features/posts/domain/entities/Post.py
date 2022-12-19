@@ -27,11 +27,20 @@ class Post(PostBase):
      when returning it from the API
      ex. id - will only be present once the data has been pushed
     """
-    
+    id: int = -99 
     """
     tell the Pydantic model to read the data even if it is not a dict, 
     but an ORM model (or any other arbitrary object with attributes)
     """
-    id: int = -99
+    class Config:
+        orm_mode = True
+
+class PostResponse(BaseModel):
+    title: str
+    content: str
+    #published: bool = False
+    #rating: Optional[int] = None
+    #created_at: datetime = datetime.now()
+
     class Config:
         orm_mode = True
