@@ -5,7 +5,7 @@ class CreatePostError(Exception):
     """Error creating Post"""
 
 class IdNotFound(Exception):
-    def __init__(self, id: int, message="id not not found"):
+    def __init__(self, id: int, message="id not found"):
         """
         General exception when id is not found.
 

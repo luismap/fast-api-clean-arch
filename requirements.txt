@@ -5,3 +5,6 @@ pydantic
 psycopg[binary]
 psycopg2
 SQLAlchemy
+pytest
+pytest-cov
+coverage
