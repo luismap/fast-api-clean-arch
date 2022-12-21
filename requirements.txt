@@ -7,4 +7,5 @@ psycopg2
 SQLAlchemy
 pytest
 pytest-cov
+pytest-notimplemented
 coverage
