@@ -29,10 +29,10 @@ class LocalStore:
 
     def getLocalData(self,file: str) -> list[dict]:
         ans = []
-        with open(file, "r") as f:
-            try:
+        try:
+            with open(file, "r") as f:
                 ans = json.load(f)["data"]
-            except:
+        except:
                 ans = None
         return ans
     
