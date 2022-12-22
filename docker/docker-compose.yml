@@ -1,5 +1,15 @@
 version: "3.8" ##optional
 services:
+  sqlite3:
+    container_name: sqlite3
+    image: nouchka/sqlite3:latest
+    stdin_open: true
+    tty: true
+    volumes:
+      - sql_lite:/root/db/
+    ports:
+      - '9000:9000' # expose ports - HOST:CONTAINER
+    restart: unless-stopped
   db:
     image: postgres:latest
     container_name: postgres-apidev
@@ -28,3 +38,4 @@ services:
 volumes:
   local_pgdata:
   pgadmin-data:
+  sql_lite:
