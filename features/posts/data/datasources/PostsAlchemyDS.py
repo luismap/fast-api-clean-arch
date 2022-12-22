@@ -70,7 +70,7 @@ class PostsAlchemyDS(DataSource):
                 self.logger.info(e)
         return ans
 
-    def deletePost(self, postId: int ) -> PostModel:
+    def deletePost(self, postId: int ) -> Optional[PostModel]:
         with self.SessionLocal() as session:
             postDel = self.getPost(postId)
             self.logger.info(f"deleting {postDel}")

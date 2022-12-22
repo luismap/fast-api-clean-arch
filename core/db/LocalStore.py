@@ -14,7 +14,7 @@ Helper class mainly for testing purpose
 class LocalStore:
 
     def __init__(self) -> None:
-        self.appProps = MyUtils.loadProperties("general")["app"]
+        self.appProps = MyUtils().loadProperties("general")["app"]
         self.logger = logging.getLogger(self.appProps["logger"])
 
     def isAvailable(self, file: str) -> bool:

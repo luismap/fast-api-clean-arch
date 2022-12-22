@@ -10,9 +10,9 @@ from features.posts.domain.entities.Post import PostCreate
 
 class PostsLocalDataSource(DataSource):
     def __init__(self) -> None:
-        self.appProps = MyUtils.loadProperties("general")["app"]
+        self.appProps = MyUtils().loadProperties("general")["app"]
         self.logger = logging.getLogger(self.appProps["logger"])
-        self.localDb = MyUtils.loadProperties("localStore")
+        self.localDb = MyUtils().loadProperties("localStore")
         self.logger.info("local datasource instanciated")
         self.postFile = self.localDb["dbFileName"]
         self.logger.info(f"{self.postFile}")
@@ -76,7 +76,7 @@ class PostsLocalDataSource(DataSource):
         self.dumpPosts(posts)
         return True if len(toUpdate) > 0 else False
 
-    def deletePost(self,postId: int ) -> PostModel:
+    def deletePost(self,postId: int ) -> Optional[PostModel]:
         posts = self.getPosts()
         postIdx = [i for i,p in enumerate(posts) if p.id == postId]
         if len(postIdx) > 1:

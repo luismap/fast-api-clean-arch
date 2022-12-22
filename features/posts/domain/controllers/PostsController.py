@@ -27,5 +27,5 @@ class PostController(ABC):
         pass
 
     @abstractclassmethod
-    def deletePost(postId: int ) -> PostModel:
+    def deletePost(postId: int ) -> Optional[PostModel]:
         pass

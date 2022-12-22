@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+from typing_extensions import override
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
@@ -34,22 +35,27 @@ class UserPostController(PostController):
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
+    @override
     def getPosts(self) -> Optional[list[PostModel]]:
         posts = self.activeDS.getPosts()
         return posts
 
+    @override
     def dumpPosts(self,posts: list[PostCreate]):
         self.activeDS.dumpPosts(posts)
 
+    @override
     def getPost(self,id: int) -> PostModel:
         post = self.activeDS.getPost(id)
         return post
 
+    @override
     def createPost(self,post: PostCreateModel) -> bool:
         return self.activeDS.createPost(post)
-
+   
+    @override
     def updatePost(self,id: int, post: dict) -> bool:
         return self.activeDS.updatePost(id, post)
 
-    def deletePost(self, postId: int ) -> PostModel:
+    def deletePost(self,postId: int ) -> Optional[PostModel]:
         return self.activeDS.deletePost(postId)

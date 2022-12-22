@@ -1,6 +1,7 @@
 
 
 import logging
+from typing import Optional
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostModel import PostModel
@@ -18,7 +19,7 @@ class PostsPostgresDS(DataSource):
         self.logger = logging.getLogger("api_dev")
         self.logger.info("postPostgresDS initialized")
         self.postgresConn = PostgresConn()
-        properties = MyUtils.loadProperties("postgres")["posts"]
+        properties = MyUtils().loadProperties("postgres")["posts"]
         self.db = properties["db"]
         self.table = properties["table"]
         self.connParams = self.postgresConn.get_conn_params()
@@ -87,7 +88,7 @@ class PostsPostgresDS(DataSource):
 
         return True
 
-    def deletePost(self, postId: int ) -> bool:
+    def deletePost(self, postId: int ) -> Optional[PostModel]:
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
                 post = self.getPost(postId) #check post exists
@@ -101,5 +102,5 @@ class PostsPostgresDS(DataSource):
                 self.logger.info(f"[deleting] post {post}")
         uPost = self.getPost(postId) #check post deleted
         if uPost == None:
-            return True
-        return False
+            return post
+        return None
