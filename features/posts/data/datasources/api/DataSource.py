@@ -1,34 +1,34 @@
 
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 from typing import Optional
 from features.posts.data.models.PostModel import PostModel
 
 class DataSource(ABC):
 
-    @abstractclassmethod
-    def isAvailable() -> bool:
+    @abstractmethod
+    def isAvailable(self) -> bool:
         pass
 
-    @abstractclassmethod
-    def getPosts() -> Optional[list[PostModel]]:
+    @abstractmethod
+    def getPosts(self) -> Optional[list[PostModel]]:
         pass
 
-    @abstractclassmethod
-    def dumpPosts(posts: list[PostModel]):
+    @abstractmethod
+    def dumpPosts(self,posts: list[PostModel]):
         pass
     
-    @abstractclassmethod
-    def getPost(id: int) -> Optional[PostModel]:
+    @abstractmethod
+    def getPost(self,id: int) -> Optional[PostModel]:
         pass
 
-    @abstractclassmethod
-    def createPost(post: PostModel) -> bool:
+    @abstractmethod
+    def createPost(self,post: PostModel) -> bool:
         pass
 
-    @abstractclassmethod
-    def updatePost(id: int, post: dict) -> bool:
+    @abstractmethod
+    def updatePost(self,id: int, post: dict) -> bool:
         pass
 
-    @abstractclassmethod
-    def deletePost(postId: int ) -> Optional[PostModel]:
+    @abstractmethod
+    def deletePost(self,postId: int ) -> Optional[PostModel]:
         pass
