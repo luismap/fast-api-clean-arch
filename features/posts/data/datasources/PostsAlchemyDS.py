@@ -2,7 +2,7 @@
 from tkinter import SE
 from typing import Optional
 from sqlalchemy.orm import Session
-from core.db.AlchemySql import Base, SessionLocal, engine
+from core.db.Postgres import PostgresConn
 from core.db.models.AlchemyModels import PostsAlmy
 from core.utils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
@@ -11,13 +11,17 @@ from features.posts.data.models.PostModel import PostModel
 from fastapi import Depends
 from features.posts.domain.entities.Post import PostCreate
 import logging
+from core.db.AlchemySql import Base, SqlAlchemyAccessLayer
 
-Base.metadata.create_all(bind=engine)
 
 # Dependency
 
 class PostsAlchemyDS(DataSource):
-    def __init__(self) -> None:
+    
+    def __init__(self, postgres_conn: PostgresConn) -> None:
+        self.sqlal = SqlAlchemyAccessLayer(postgres_conn.get_uri_conn())
+        Base.metadata.create_all(bind=self.sqlal.engine)
+        self.SessionLocal = self.sqlal.SessionLocal
         self.logger = logging.getLogger("api_dev")
         self.logger.info("Alchemy Datasource initialized")
 
@@ -25,12 +29,12 @@ class PostsAlchemyDS(DataSource):
         return True
 
     def getPosts(self) -> list[PostModel]:
-        with SessionLocal() as session:
+        with self.SessionLocal() as session:
             posts = session.query(PostsAlmy).all()
         return posts
 
     def getPost(self,userId: int) -> Optional[PostModel]:
-        with SessionLocal() as session:
+        with self.SessionLocal() as session:
             post = session.query(PostsAlmy).filter(PostsAlmy.id == userId).first()
         return post
 
@@ -39,7 +43,7 @@ class PostsAlchemyDS(DataSource):
 
     def createPost(self,post: PostCreateModel) -> bool:
         ans = True
-        with SessionLocal() as session:
+        with self.SessionLocal() as session:
             try:
                 session.add(PostsAlmy(**post.dict()))
                 session.commit()
@@ -52,7 +56,7 @@ class PostsAlchemyDS(DataSource):
 
     def updatePost(self, id: int, post: dict) -> bool:
         ans = False
-        with SessionLocal() as session:
+        with self.SessionLocal() as session:
             try:
                 update = session\
                     .query(PostsAlmy)\
@@ -67,7 +71,7 @@ class PostsAlchemyDS(DataSource):
         return ans
 
     def deletePost(self, postId: int ) -> PostModel:
-        with SessionLocal() as session:
+        with self.SessionLocal() as session:
             postDel = self.getPost(postId)
             self.logger.info(f"deleting {postDel}")
             if postDel:#if not None

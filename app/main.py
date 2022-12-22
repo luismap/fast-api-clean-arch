@@ -5,8 +5,8 @@ from fastapi import Body, FastAPI, HTTPException, status
 import logging
 import logging.config
 import yaml
+from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
-from core.db.AlchemySql import Base, engine, SessionLocal
 from features.posts.data.controllers.UserPostController import UserPostController
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
@@ -41,7 +41,8 @@ logger.info("Configured the logger!")
 app = FastAPI()
 
 # user postController
-alchemyDS = PostsAlchemyDS()
+postgreConn = PostgresConn()
+alchemyDS = PostsAlchemyDS(postgreConn)
 localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
