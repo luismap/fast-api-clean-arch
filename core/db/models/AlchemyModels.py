@@ -10,7 +10,6 @@ class PostsAlmy(Base):
     __tablename__ = "posts_almy"
     __table_args__ = {'schema': 'fast_api'}
 
-    schema = "fast_api"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, unique=False)
     content = Column(String)
