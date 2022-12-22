@@ -26,7 +26,7 @@ from sqlalchemy.orm import Session
  
 
 canlog = True
-appProps = MyUtils.loadProperties("general")["app"]
+appProps = MyUtils().loadProperties("general")["app"]
 
 # Initialize the logger once as the application starts up.
 with open("logging.yaml", 'rt') as f:
@@ -56,7 +56,7 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/posts", response_model=List[PostResponseModel])
-def get_post():
+def get_posts():
     parsedData = GetPosts(userPostController).getPosts()
     logger.info(parsedData)
     return parsedData
@@ -76,7 +76,7 @@ def get_post():
     return {"postsIds": ids}
 
 @app.get("/posts/{id}", response_model=PostResponseModel)
-def get_post(id: int):
+def get_post_id(id: int):
     logger.info(f"retriving id {id}")
     post = GetPostsById(userPostController).getPostById(id)
     if not post: 
