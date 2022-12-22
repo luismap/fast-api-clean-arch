@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 from typing import Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
@@ -6,26 +6,26 @@ from features.posts.domain.entities.Post import Post, PostCreate
 
 
 class PostController(ABC):
-    @abstractclassmethod
-    def getPosts() -> Optional[list[PostModel]]:
+    @abstractmethod
+    def getPosts(self) -> Optional[list[PostModel]]:
         pass
 
-    @abstractclassmethod
-    def dumpPosts(posts: list[PostCreate]):
+    @abstractmethod
+    def dumpPosts(self,posts: list[PostCreate]):
         pass
 
-    @abstractclassmethod
-    def getPost(id: int) -> PostModel:
+    @abstractmethod
+    def getPost(self,id: int) -> PostModel:
         pass
 
-    @abstractclassmethod
-    def createPost(post: PostCreateModel) -> bool:
+    @abstractmethod
+    def createPost(self,post: PostCreateModel) -> bool:
         pass
 
-    @abstractclassmethod
-    def updatePost(id: int, post: dict) -> bool:
+    @abstractmethod
+    def updatePost(self,id: int, post: dict) -> bool:
         pass
 
-    @abstractclassmethod
-    def deletePost(postId: int ) -> Optional[PostModel]:
+    @abstractmethod
+    def deletePost(self,postId: int ) -> Optional[PostModel]:
         pass
