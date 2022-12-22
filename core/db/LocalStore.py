@@ -3,6 +3,7 @@ from asyncio.log import logger
 import json
 from logging import Logger
 import logging
+from typing import Optional
 
 from core.utils.MyUtils import MyUtils
 
@@ -27,8 +28,7 @@ class LocalStore:
 
 
 
-    def getLocalData(self,file: str) -> list[dict]:
-        ans = []
+    def getLocalData(self,file: str) -> Optional[list[dict]]:
         try:
             with open(file, "r") as f:
                 ans = json.load(f)["data"]
