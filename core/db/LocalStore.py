@@ -37,6 +37,10 @@ class LocalStore:
         return ans
     
     def dumpLocalData(self, file: str, posts: list[dict]) -> bool:
-        with open(file, "w") as f:
-            json.dump({"data": [e for e in posts]},f)
+        try:
+            with open(file, "w") as f:
+                json.dump({"data": [e for e in posts]},f)
+            return True
+        except Exception as e:
+            return False
 
