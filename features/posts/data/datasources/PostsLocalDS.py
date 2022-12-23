@@ -32,14 +32,14 @@ class PostsLocalDataSource(DataSource):
         else:
             return None
 
-    def dumpPosts(self,posts: list[PostCreate]):
+    def dumpPosts(self,posts: list[PostCreateModel]):
         data = [e.dict() for e in posts]
         f = lambda e : e.update({'created_at': str(e['created_at'])})
         list(map((f),data))
         self.logger.info(f"data to dump {data}")
         self.localStore.dumpLocalData(self.postFile, data)
 
-    def getPost(self,id: int) -> PostModel:
+    def getPost(self,id: int) -> Optional[PostModel]:
         """given an id, get post from local datasource
         Args:
             id (int): id
@@ -48,14 +48,20 @@ class PostsLocalDataSource(DataSource):
             PostModel: a post model
         """
         localPosts = self.getPosts()
-        post = list(filter(lambda p: p.id == id, localPosts))
-        return post[0] if len(post) > 0 else None
+        if localPosts:
+            post = list(filter(lambda p: p.id == id, localPosts))
+            return post[0] 
+        else:
+            return None
 
     def createPost(self,payload: PostCreateModel) -> bool:
         try:
-            posts = self.getPosts()
-            if posts:
-                newId = max([e.id for e in posts]) + 1
+            posts = []
+            tmp_posts = self.getPosts()
+            if tmp_posts:
+                posts = [PostCreateModel(**e.dict()) for e in tmp_posts]
+                ids = map(lambda e: e if e else 0,[e.id for e in posts])
+                newId = max(ids) + 1
             else:
                 newId = 1
                 posts = []

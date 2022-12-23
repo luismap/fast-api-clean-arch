@@ -37,6 +37,9 @@ class Post(PostBase):
         orm_mode = True
 
 class PostResponse(BaseModel):
+    """
+    Pydantic use for api response
+    """
     title: str
     content: str
     #published: bool = False

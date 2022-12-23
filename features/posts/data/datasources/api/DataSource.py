@@ -1,7 +1,9 @@
 
 from abc import ABC, abstractmethod
 from typing import Optional
+from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
+from features.posts.domain.entities.Post import PostCreate
 
 class DataSource(ABC):
 
@@ -14,7 +16,7 @@ class DataSource(ABC):
         pass
 
     @abstractmethod
-    def dumpPosts(self,posts: list[PostModel]):
+    def dumpPosts(self,posts: list[PostCreateModel]):
         pass
     
     @abstractmethod
@@ -22,7 +24,7 @@ class DataSource(ABC):
         pass
 
     @abstractmethod
-    def createPost(self,post: PostModel) -> bool:
+    def createPost(self,post: PostCreateModel) -> bool:
         pass
 
     @abstractmethod

@@ -22,7 +22,7 @@ def local_data():
 class TestLocalStore:
 
     def test_is_available_return_true(self, local_store):
-        fileName = MyUtils.loadProperties("localStore")["dbFileName"]
+        fileName = MyUtils().loadProperties("localStore")["dbFileName"]
         assert(True == local_store.isAvailable(fileName))
 
     def test_is_available_return_false(self, local_store):
