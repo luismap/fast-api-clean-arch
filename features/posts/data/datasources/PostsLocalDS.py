@@ -50,7 +50,7 @@ class PostsLocalDataSource(DataSource):
         localPosts = self.getPosts()
         if localPosts:
             post = list(filter(lambda p: p.id == id, localPosts))
-            return post[0] 
+            return post[0] if post else None 
         else:
             return None
 

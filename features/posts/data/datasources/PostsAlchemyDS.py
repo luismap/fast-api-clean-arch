@@ -26,7 +26,7 @@ class PostsAlchemyDS(DataSource):
         self.logger.info("Alchemy Datasource initialized")
 
     def isAvailable(self) -> bool:
-        return False
+        return True
 
     def getPosts(self) -> list[PostModel]:
         with self.SessionLocal() as session:

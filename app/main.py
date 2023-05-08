@@ -47,9 +47,6 @@ localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
 
-
-
-
 @app.get("/")
 def read_root():
     if canlog: logger.info("root got call")
