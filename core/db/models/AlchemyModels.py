@@ -16,3 +16,13 @@ class PostsAlmy(Base):
     published = Column(Boolean, server_default="false")
     rating = Column(SmallInteger, server_default="0")
     created_at = Column(TIMESTAMP, server_default=func.now())
+
+
+class UserAlmy(Base):
+    __tablename__="user_almy"
+    __table_args__= {'schema': 'fast_api'}
+
+    user_id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, nullable=False,unique=True)
+    password = Column(String, nullable=False)
+    created_at= Column(TIMESTAMP, server_default=func.now())
