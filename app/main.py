@@ -14,10 +14,8 @@ from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.datasources.UserAlchemyDS import UserAlchemyDS
 from features.posts.data.models.PostCreateModel import PostCreateModel
-from features.posts.data.models.PostModel import PostModel
 from features.posts.data.models.PostResponseModel import PostResponseModel
-from features.posts.domain.entities.Post import PostCreate
-from features.posts.domain.entities.User import UserResponse
+import features.posts.data.models.UserModel as um
 from features.posts.domain.usecases.CreatePosts import CreatePosts
 from features.posts.domain.usecases.DeletePosts import DeletePost
 from features.posts.domain.usecases.GetPosts import GetPosts
@@ -108,7 +106,7 @@ def update_post(id: int, post: dict):
     return {"updated": updated}
 
 #user section
-@app.get("/user/{id}", response_model=UserResponse)
+@app.get("/user/{id}", response_model=um.UserResponse, status_code=status.HTTP_202_ACCEPTED)
 def get_user(id: int):
     logger.info(f"retriving user id {id}")
     user = UserCrud(user_handler).get_user(id)
@@ -116,3 +114,12 @@ def get_user(id: int):
         raise HTTPException(404, detail=f"user id: {id} not found")
     
     return user
+
+
+@app.post("/createuser",status_code=status.HTTP_201_CREATED)
+def create_post(payload: um.UserCreate):
+    logger.info(payload)
+    parsedData = UserCrud(user_handler).create_user(payload)
+    if not parsedData:
+        raise HTTPException(404, "not able to create user")
+    return {"added": parsedData}

@@ -3,12 +3,14 @@
 import logging
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.UserAlchemyDS import UserAlchemyDS
-from features.posts.data.datasources.api.UserDataSource import UserDataSource
+
+import features.posts.data.models.UserModel as um
 from features.posts.domain.controllers.UserController import UserController
-from features.posts.domain.entities.User import UserModel
+
 
 
 class UserHandler(UserController):
+    @classmethod
     def __init__(self,
                  user_alchemy_ds: UserAlchemyDS
                  ) -> None:
@@ -19,6 +21,10 @@ class UserHandler(UserController):
         self.data_source = user_alchemy_ds
         self.logger.info("using user alchemy data source")
             
-    
-    def get_user(self,id: int) -> UserModel:
+    @classmethod
+    def get_user(self,id: int) -> um.UserModel:
         return self.data_source.get_user(id)        
+
+    @classmethod
+    def create_user(self, payload: um.UserCreate) -> um.UserRead:
+        return self.data_source.create_user(payload)

@@ -1,16 +1,19 @@
 
 
 
-from abc import ABC, ABCMeta
+from abc import ABC
 
-from features.posts.domain.entities.User import UserModel
-
+import features.posts.data.models.UserModel as um
 
 class UserDataSource(ABC):
     @classmethod
-    def get_users(id: int) -> UserModel:
+    def get_users(id: int) -> um.UserRead:
         pass
 
     @classmethod
     def is_available() -> bool:
+        pass
+
+    @classmethod
+    def create_user(payload: um.UserCreate) -> um.UserRead:
         pass

@@ -2,6 +2,7 @@ fastapi
 uvicorn[standard]
 PyYAML
 pydantic
+pydantic[email]
 psycopg[binary]
 psycopg2
 SQLAlchemy
@@ -12,3 +13,4 @@ coverage
 black
 mypy
 lint
+

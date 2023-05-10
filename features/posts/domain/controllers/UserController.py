@@ -1,9 +1,14 @@
 
-from abc import ABC, ABCMeta, abstractmethod
+from abc import ABC
 
-from features.posts.domain.entities.User import UserModel
+from features.posts.data.models.UserModel import UserCreate, UserModel, UserRead
+
 
 class UserController(ABC):
-    @abstractmethod
+    @classmethod
     def get_user(id: int) -> UserModel:
+        pass
+
+    @classmethod
+    def create_user(payload: UserCreate) -> UserRead:
         pass

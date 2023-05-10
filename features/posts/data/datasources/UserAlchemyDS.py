@@ -5,8 +5,9 @@ import logging
 from core.db.AlchemySql import SqlAlchemyAccessLayer, Base
 from core.db.Postgres import PostgresConn
 from features.posts.data.datasources.api.UserDataSource import UserDataSource
-from features.posts.domain.entities.User import UserModel
+
 from core.db.models.AlchemyModels import UserAlmy
+import features.posts.data.models.UserModel as um
 
 class UserAlchemyDS(UserDataSource):
         
@@ -15,13 +16,26 @@ class UserAlchemyDS(UserDataSource):
         Base.metadata.create_all(bind=self.sqlal.engine)
         self.SessionLocal = self.sqlal.SessionLocal
         self.logger = logging.getLogger("api_dev")
-        self.logger.info("Alchemy UserDatasource initialized")    
+        self.logger.info("Alchemy UserDatasource initialized")
 
-
-    def get_user(self, id: int) -> UserModel:
+    def get_user(self, id: int) -> um.UserRead:
         with self.SessionLocal() as session:
             user = session.query(UserAlmy).filter(UserAlmy.user_id == id).first()
         return user
     
     def is_available() -> bool:
         return True
+
+    def create_user(self, payload: um.UserCreate) -> um.UserRead :
+        inserted = None
+        with self.SessionLocal() as session:
+            try:
+                session.add(UserAlmy(**payload.dict()))
+                session.commit()
+                session.flush()
+                inserted = session.query(UserAlmy).filter(UserAlmy.email==payload.email).first()
+            except Exception as e:
+                self.logger.info(f"exception: {e}")
+                session.rollback()
+                session.flush()
+        return inserted      
