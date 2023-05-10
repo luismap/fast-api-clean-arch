@@ -14,6 +14,12 @@ class PostBase(BaseModel):
     rating: Optional[int] = None
     created_at: datetime = datetime.now()
 
+class Post(PostBase):
+    """Class to be use for Model design"""
+    id: Optional[int]
+    class Config:
+        orm_mode = True
+
 class PostCreate(PostBase):
     """create a PostCreate that inherit from PostBase (so they will have the same attributes),
      plus any additional data (attributes) needed for creation"""
@@ -22,7 +28,7 @@ class PostCreate(PostBase):
         orm_mode = True
 
 
-class Post(PostBase):
+class PostRead(PostBase):
     """
     Pydantic models (schemas) that will be used when reading data,
      when returning it from the API

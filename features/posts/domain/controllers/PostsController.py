@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
-from features.posts.domain.entities.Post import Post, PostCreate
+from features.posts.domain.entities.Post import PostCreate
 
 
 class PostController(ABC):
