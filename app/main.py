@@ -106,20 +106,19 @@ def update_post(id: int, post: dict):
     return {"updated": updated}
 
 #user section
-@app.get("/user/{id}", response_model=um.UserResponse, status_code=status.HTTP_202_ACCEPTED)
+@app.get("/user/{id}",response_model=um.UserResponse, status_code=status.HTTP_202_ACCEPTED)
 def get_user(id: int):
     logger.info(f"retriving user id {id}")
     user = UserCrud(user_handler).get_user(id)
     if not user:
         raise HTTPException(404, detail=f"user id: {id} not found")
-    
     return user
 
 
-@app.post("/createuser",status_code=status.HTTP_201_CREATED)
+@app.post("/createuser",status_code=status.HTTP_201_CREATED, response_model=um.UserResponse)
 def create_post(payload: um.UserCreate):
     logger.info(payload)
     parsedData = UserCrud(user_handler).create_user(payload)
     if not parsedData:
         raise HTTPException(404, "not able to create user")
-    return {"added": parsedData}
+    return parsedData

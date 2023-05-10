@@ -38,4 +38,4 @@ class UserAlchemyDS(UserDataSource):
                 self.logger.info(f"exception: {e}")
                 session.rollback()
                 session.flush()
-        return inserted      
+        return inserted
