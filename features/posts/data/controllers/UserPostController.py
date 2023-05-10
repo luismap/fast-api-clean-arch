@@ -20,7 +20,7 @@ class UserPostController(PostController):
         self.localDS = localDS
         self.postgresDS = postgresDS
         self.alchemyDS = alchemyDS
-        self.appProps = MyUtils().loadProperties("general")["app"]
+        self.appProps = MyUtils.loadProperties("general")["app"]
         self.appState = self.appProps["env"]
         self.logger = logging.getLogger(self.appProps["logger"])
         if alchemyDS.isAvailable():

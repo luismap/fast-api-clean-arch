@@ -7,26 +7,30 @@ import logging.config
 import yaml
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
+from features.posts.data.controllers.UserHandler import UserHandler
 from features.posts.data.controllers.UserPostController import UserPostController
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
+from features.posts.data.datasources.UserAlchemyDS import UserAlchemyDS
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.data.models.PostResponseModel import PostResponseModel
 from features.posts.domain.entities.Post import PostCreate
+from features.posts.domain.entities.User import UserResponse
 from features.posts.domain.usecases.CreatePosts import CreatePosts
 from features.posts.domain.usecases.DeletePosts import DeletePost
 from features.posts.domain.usecases.GetPosts import GetPosts
 from features.posts.domain.usecases.GetPostsById import GetPostsById
 from features.posts.domain.usecases.GetPostsIds import GetPostsIds
+from features.posts.domain.usecases.UserCrud import UserCrud
 from features.posts.domain.usecases.UpdatePosts import UpdatePosts
 from fastapi import Depends
 from sqlalchemy.orm import Session
  
 
 canlog = True
-appProps = MyUtils().loadProperties("general")["app"]
+appProps = MyUtils.loadProperties("general")["app"]
 
 # Initialize the logger once as the application starts up.
 with open("logging.yaml", 'rt') as f:
@@ -40,12 +44,17 @@ logger.info("Configured the logger!")
 
 app = FastAPI()
 
-# user postController
 postgreConn = PostgresConn()
+# user postController
+
 alchemyDS = PostsAlchemyDS(postgreConn)
 localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
+
+#user handler
+user_alchemy_ds = UserAlchemyDS(postgreConn)
+user_handler = UserHandler(user_alchemy_ds)
 
 @app.get("/")
 def read_root():
@@ -98,3 +107,12 @@ def update_post(id: int, post: dict):
          raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}
 
+#user section
+@app.get("/user/{id}", response_model=UserResponse)
+def get_user(id: int):
+    logger.info(f"retriving user id {id}")
+    user = UserCrud(user_handler).get_user(id)
+    if not user:
+        raise HTTPException(404, detail=f"user id: {id} not found")
+    
+    return user

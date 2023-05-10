@@ -19,7 +19,7 @@ class PostsPostgresDS(DataSource):
         self.logger = logging.getLogger("api_dev")
         self.logger.info("postPostgresDS initialized")
         self.postgresConn = PostgresConn()
-        properties = MyUtils().loadProperties("postgres")["posts"]
+        properties = MyUtils.loadProperties("postgres")["posts"]
         self.db = properties["db"]
         self.table = properties["table"]
         self.connParams = self.postgresConn.get_conn_params()

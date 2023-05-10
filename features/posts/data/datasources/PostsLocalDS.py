@@ -10,9 +10,9 @@ from features.posts.domain.entities.Post import PostCreate
 
 class PostsLocalDataSource(DataSource):
     def __init__(self) -> None:
-        self.appProps = MyUtils().loadProperties("general")["app"]
+        self.appProps = MyUtils.loadProperties("general")["app"]
         self.logger = logging.getLogger(self.appProps["logger"])
-        self.localDb = MyUtils().loadProperties("localStore")
+        self.localDb = MyUtils.loadProperties("localStore")
         self.logger.info("local datasource instanciated")
         self.postFile = self.localDb["dbFileName"]
         self.logger.info(f"{self.postFile}")

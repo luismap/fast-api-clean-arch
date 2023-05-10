@@ -2,7 +2,7 @@ from features.posts.domain.entities.Post import Post
 import logging
 from core.utils.MyUtils import MyUtils
 
-appProps = MyUtils().loadProperties("general")["app"]
+appProps = MyUtils.loadProperties("general")["app"]
 logger = logging.getLogger(appProps["logger"])
 
 class PostModel(Post):

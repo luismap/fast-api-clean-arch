@@ -7,9 +7,9 @@ from features.posts.domain.controllers.PostsController import PostController
 
 class GetPostsById:
     def __init__(self, postCtrl: PostController) -> None:
-        appProps = MyUtils().loadProperties(key="general")["app"]
+        appProps = MyUtils.loadProperties(key="general")["app"]
         self.postController = postCtrl
-        self.appProps = MyUtils().loadProperties("general")["app"]
+        self.appProps = MyUtils.loadProperties("general")["app"]
         self.logger = logging.getLogger(appProps["logger"])
     
     def getPostById(self,id: int) -> PostModel:
