@@ -35,7 +35,7 @@ class UserAlchemyDS(UserDataSource):
                 session.flush()
                 inserted = session.query(UserAlmy).filter(UserAlmy.email==payload.email).first()
             except Exception as e:
-                self.logger.info(f"exception: {e}")
+                self.logger.error(f"exception: {e}")
                 session.rollback()
                 session.flush()
         return inserted
