@@ -1,4 +1,3 @@
-import imp
 from typing import List
 from fastapi import Body, FastAPI, HTTPException, status
 
@@ -24,8 +23,6 @@ from features.posts.domain.usecases.GetPostsIds import GetPostsIds
 from features.posts.domain.usecases.UserCrud import UserCrud
 from features.posts.domain.usecases.UpdatePosts import UpdatePosts
 from fastapi import Depends
-from sqlalchemy.orm import Session
- 
 
 canlog = True
 appProps = MyUtils.loadProperties("general")["app"]
@@ -42,9 +39,13 @@ logger.info("Configured the logger!")
 
 app = FastAPI()
 
-postgreConn = PostgresConn()
-# user postController
+#security
 
+
+#db conn
+postgreConn = PostgresConn()
+
+# user postController
 alchemyDS = PostsAlchemyDS(postgreConn)
 localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
@@ -117,6 +118,7 @@ def get_user(id: int):
 
 @app.post("/createuser",status_code=status.HTTP_201_CREATED, response_model=um.UserResponse)
 def create_post(payload: um.UserCreate):
+    payload.password = MyUtils.hash(payload.password)
     logger.info(payload)
     parsedData = UserCrud(user_handler).create_user(payload)
     if not parsedData:
