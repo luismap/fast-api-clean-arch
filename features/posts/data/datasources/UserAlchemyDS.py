@@ -1,6 +1,3 @@
-
-
-
 import logging
 from core.db.AlchemySql import SqlAlchemyAccessLayer, Base
 from core.db.Postgres import PostgresConn

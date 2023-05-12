@@ -24,6 +24,7 @@ class UserPostController(PostController):
         self.appState = self.appProps["env"]
         self.logger = logging.getLogger(self.appProps["logger"])
         if alchemyDS.isAvailable():
+            print("working with XXXXX")
             self.logger.info("using alchemy DS")
             self.activeDS = alchemyDS
         elif postgresDS.isAvailable():
