@@ -6,3 +6,4 @@ from pydantic import EmailStr
 
 class Credentials(BaseModel):
     email: EmailStr
+    password: str

@@ -20,3 +20,6 @@ class MyUtils():
     def hash(content: str) -> str:
         return crypt_context.hash(content)
 
+    def verify(content: str, hashed_content: str) -> bool:
+        return crypt_context.verify(content, hashed_content)
+

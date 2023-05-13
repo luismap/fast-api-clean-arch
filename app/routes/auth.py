@@ -1,7 +1,7 @@
 
 
 import logging
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
 from features.user.data.controllers.UserHandler import UserHandler
@@ -31,6 +31,11 @@ def login(user_credentials: CredentialsModel):
     logger.info(f"retriving user email {user_credentials.email}")
     user = UserCrud(user_handler).get_user_by_email(user_credentials.email)
     logger.info(f"got user {user}")
-    if not user:
-        raise HTTPException(404, detail=f"Invalid Credentials")
+    if user:
+        verification = MyUtils.verify(user_credentials.password, user.password)
+        if not verification:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                             detail="Invalid Credentials")
+    else:
+        raise HTTPException(404, detail="Invalid Credentials")
     return user
