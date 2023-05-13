@@ -21,7 +21,7 @@ user_handler = UserHandler(user_alchemy_ds)
 
 router = APIRouter(
     prefix="/user",
-    tags="user"
+    tags=["user"]
 )
 
 #user section
