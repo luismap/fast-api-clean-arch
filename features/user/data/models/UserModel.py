@@ -4,7 +4,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-from features.posts.domain.entities.User import User
+from features.user.domain.entities.User import User
 
     
 

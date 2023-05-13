@@ -1,6 +1,6 @@
 
-from features.posts.data.controllers.UserHandler import UserHandler
-import features.posts.data.models.UserModel as um
+from features.user.data.controllers.UserHandler import UserHandler
+import features.user.data.models.UserModel as um
 
 
 class UserCrud:

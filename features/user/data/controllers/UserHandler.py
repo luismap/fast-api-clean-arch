@@ -2,10 +2,10 @@
 
 import logging
 from core.utils.MyUtils import MyUtils
-from features.posts.data.datasources.UserAlchemyDS import UserAlchemyDS
+from features.user.data.datasources.UserAlchemyDS import UserAlchemyDS
 
-import features.posts.data.models.UserModel as um
-from features.posts.domain.controllers.UserController import UserController
+import features.user.data.models.UserModel as um
+from features.user.domain.controllers.UserController import UserController
 
 
 

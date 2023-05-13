@@ -3,10 +3,10 @@ import logging
 from fastapi import APIRouter, HTTPException,status
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
-from features.posts.data.controllers.UserHandler import UserHandler
-from features.posts.data.datasources.UserAlchemyDS import UserAlchemyDS
-import features.posts.data.models.UserModel as um
-from features.posts.domain.usecases.UserCrud import UserCrud
+from features.user.data.controllers.UserHandler import UserHandler
+from features.user.data.datasources.UserAlchemyDS import UserAlchemyDS
+import features.user.data.models.UserModel as um
+from features.user.domain.usecase.UserCrud import UserCrud
 
 canlog = True
 appProps = MyUtils.loadProperties("general")["app"]

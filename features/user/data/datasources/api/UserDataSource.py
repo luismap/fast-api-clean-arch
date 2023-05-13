@@ -3,7 +3,7 @@
 
 from abc import ABC
 
-import features.posts.data.models.UserModel as um
+import features.user.data.models.UserModel as um
 
 class UserDataSource(ABC):
     @classmethod

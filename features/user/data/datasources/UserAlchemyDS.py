@@ -1,10 +1,10 @@
 import logging
 from core.db.AlchemySql import SqlAlchemyAccessLayer, Base
 from core.db.Postgres import PostgresConn
-from features.posts.data.datasources.api.UserDataSource import UserDataSource
+from features.user.data.datasources.api.UserDataSource import UserDataSource
 
 from core.db.models.AlchemyModels import UserAlmy
-import features.posts.data.models.UserModel as um
+import features.user.data.models.UserModel as um
 
 class UserAlchemyDS(UserDataSource):
         

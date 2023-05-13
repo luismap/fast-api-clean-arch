@@ -4,7 +4,7 @@ import logging
 import logging.config
 from app.routes import post, user
 from core.utils.MyUtils import MyUtils
-from features.posts.data.controllers.UserHandler import UserHandler
+from features.user.data.controllers.UserHandler import UserHandler
     
 canlog = True
 appProps = MyUtils.loadProperties("general")["app"]

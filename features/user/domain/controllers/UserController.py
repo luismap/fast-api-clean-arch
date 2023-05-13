@@ -1,7 +1,7 @@
 
 from abc import ABC
 
-from features.posts.data.models.UserModel import UserCreate, UserModel, UserRead
+from features.user.data.models.UserModel import UserCreate, UserModel, UserRead
 
 
 class UserController(ABC):
