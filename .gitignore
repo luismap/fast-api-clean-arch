@@ -6,3 +6,9 @@ log/*
 .ipynb_checkpoints
 *ipynb*
 .env
+
+#misc
+.coverage
+fast_api
+notes/*
+whereIamnowVid.txt
