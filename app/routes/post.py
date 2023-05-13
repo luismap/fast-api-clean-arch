@@ -44,7 +44,8 @@ localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
 router = APIRouter(
-    prefix="/posts"
+    prefix="/posts",
+    tags=['post']
 )
 
 @router.get("/", response_model=List[PostResponseModel])

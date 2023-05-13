@@ -20,7 +20,8 @@ user_alchemy_ds = UserAlchemyDS(postgreConn)
 user_handler = UserHandler(user_alchemy_ds)
 
 router = APIRouter(
-    prefix="/user"
+    prefix="/user",
+    tags="user"
 )
 
 #user section
