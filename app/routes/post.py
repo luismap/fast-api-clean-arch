@@ -43,15 +43,17 @@ alchemyDS = PostsAlchemyDS(postgreConn)
 localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
-router = APIRouter()
+router = APIRouter(
+    prefix="/posts"
+)
 
-@router.get("/posts", response_model=List[PostResponseModel])
+@router.get("/", response_model=List[PostResponseModel])
 def get_posts():
     parsedData = GetPosts(userPostController).getPosts()
     logger.info(parsedData)
     return parsedData
 
-@router.post("/createpost",status_code=201)
+@router.post("/create",status_code=201)
 def create_post(payload: PostCreateModel):
     logger.info(payload)
     parsedData = CreatePosts(userPostController).createPosts(payload)
@@ -59,13 +61,13 @@ def create_post(payload: PostCreateModel):
         raise HTTPException(404, "not able to create post")
     return {"added": parsedData}
 
-@router.get("/posts/ids")
+@router.get("/ids")
 def get_post():
     ids = GetPostsIds(userPostController).getPostsIds()
     logger.info(ids)
     return {"postsIds": ids}
 
-@router.get("/posts/{id}", response_model=PostResponseModel)
+@router.get("/{id}", response_model=PostResponseModel)
 def get_post_id(id: int):
     logger.info(f"retriving id {id}")
     post = GetPostsById(userPostController).getPostById(id)
@@ -73,7 +75,7 @@ def get_post_id(id: int):
         raise HTTPException(404, detail=f"post id: {id} not found")
     return post
 
-@router.delete("/posts/{id}")
+@router.delete("/{id}")
 def delete_post(id: int):
     logger.info(f"deleting post with id: {id}")
     deleted = DeletePost(userPostController).deletePost(id)
@@ -81,7 +83,7 @@ def delete_post(id: int):
         raise HTTPException(404, detail=f"fail to delete id {id}")
     return {"deleted": deleted}
 
-@router.put("/post/{id}")
+@router.put("/{id}")
 def update_post(id: int, post: dict):
     logger.info(f"updating for id {id} with data {post} type {type(post)}")
     if not id: 

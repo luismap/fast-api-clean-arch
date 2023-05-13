@@ -19,10 +19,12 @@ postgreConn = PostgresConn()
 user_alchemy_ds = UserAlchemyDS(postgreConn)
 user_handler = UserHandler(user_alchemy_ds)
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/user"
+)
 
 #user section
-@router.get("/user/{id}",response_model=um.UserResponse, status_code=status.HTTP_202_ACCEPTED)
+@router.get("/{id}",response_model=um.UserResponse, status_code=status.HTTP_202_ACCEPTED)
 def get_user(id: int):
     logger.info(f"retriving user id {id}")
     user = UserCrud(user_handler).get_user(id)
@@ -31,7 +33,7 @@ def get_user(id: int):
     return user
 
 
-@router.post("/createuser",status_code=status.HTTP_201_CREATED, response_model=um.UserResponse)
+@router.post("/create",status_code=status.HTTP_201_CREATED, response_model=um.UserResponse)
 def create_post(payload: um.UserCreate):
     payload.password = MyUtils.hash(payload.password)
     logger.info(payload)
