@@ -5,6 +5,7 @@ from core.utils.MyUtils import MyUtils
 from features.user.data.datasources.UserAlchemyDS import UserAlchemyDS
 
 import features.user.data.models.UserModel as um
+from features.user.data.models.UserModel import UserRead
 from features.user.domain.controllers.UserController import UserController
 
 
@@ -28,3 +29,7 @@ class UserHandler(UserController):
     @classmethod
     def create_user(self, payload: um.UserCreate) -> um.UserRead:
         return self.data_source.create_user(payload)
+
+    @classmethod
+    def get_user_by_email(self, email: str) -> UserRead:
+        return self.data_source.get_user_by_email(email)

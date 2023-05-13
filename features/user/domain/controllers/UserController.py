@@ -12,3 +12,7 @@ class UserController(ABC):
     @classmethod
     def create_user(payload: UserCreate) -> UserRead:
         pass
+
+    @classmethod
+    def get_user_by_email(email: str) -> UserRead:
+        pass

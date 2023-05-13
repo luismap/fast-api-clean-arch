@@ -17,3 +17,7 @@ class UserDataSource(ABC):
     @classmethod
     def create_user(payload: um.UserCreate) -> um.UserRead:
         pass
+
+    @classmethod
+    def get_user_by_email(email: str) -> um.UserRead:
+        pass

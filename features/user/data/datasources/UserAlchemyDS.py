@@ -36,3 +36,14 @@ class UserAlchemyDS(UserDataSource):
                 session.rollback()
                 session.flush()
         return inserted
+
+    def get_user_by_email(self,email: str) -> um.UserRead:
+        with self.SessionLocal() as session:
+            try:
+                user = session.query(UserAlmy).filter(UserAlmy.email == email).first()
+                self.logger.info(f"retrieved user {user}")
+            except Exception as e:
+                self.logger.error(f"exception: {e}")
+            return user if user else None
+
+ 

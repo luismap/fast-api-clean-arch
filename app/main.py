@@ -2,7 +2,7 @@ from fastapi import Body, FastAPI
 
 import logging
 import logging.config
-from app.routes import post, user
+from app.routes import auth, post, user
 from core.utils.MyUtils import MyUtils
 from features.user.data.controllers.UserHandler import UserHandler
     
@@ -19,3 +19,4 @@ def read_root():
 
 app.include_router(post.router)
 app.include_router(user.router)
+app.include_router(auth.router)

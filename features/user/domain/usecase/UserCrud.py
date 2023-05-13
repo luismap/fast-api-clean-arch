@@ -12,3 +12,6 @@ class UserCrud:
 
     def create_user(self, payload: um.UserCreate) -> um.UserRead:
         return self.user_handler.create_user(payload)
+
+    def get_user_by_email(self, email: str) -> um.UserRead:
+        return self.user_handler.get_user_by_email(email)
