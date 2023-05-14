@@ -42,7 +42,7 @@ def login(user_cred: OAuth2PasswordRequestForm = Depends()):
                              detail="Invalid Credentials")
         else:
             access_token = create_access_token(
-                {"username": user.user_id}
+                {"user_id": user.user_id}
                 )
     else:
         raise HTTPException(404, detail="Invalid Credentials")
