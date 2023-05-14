@@ -3,13 +3,14 @@
 import logging
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
-from app.auth.oauth2 import Token
+from app.auth.oauth2 import create_access_token
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
 from features.user.data.controllers.UserHandler import UserHandler
 from features.user.data.datasources.UserAlchemyDS import UserAlchemyDS
 
 from features.user.data.models.CredentialsModel import CredentialsModel, CredentialsResponse
+from features.user.data.models.TokenModel import TokenModel
 from features.user.data.models.UserModel import UserRead
 from features.user.domain.usecase.UserCrud import UserCrud
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -29,7 +30,7 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenModel)
 def login(user_cred: OAuth2PasswordRequestForm = Depends()):
     logger.info(f"retriving user email {user_cred.username}")
     user = UserCrud(user_handler).get_user_by_email(user_cred.username)
@@ -39,5 +40,11 @@ def login(user_cred: OAuth2PasswordRequestForm = Depends()):
         if not verification:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                              detail="Invalid Credentials")
+        else:
+            access_token = create_access_token(
+                {"username": user.user_id}
+                )
+    else:
+        raise HTTPException(404, detail="Invalid Credentials")
 
-    return {"access_token": user.password, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer"}

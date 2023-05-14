@@ -1,20 +1,11 @@
-from datetime import timedelta
-import datetime
+from datetime import timedelta, datetime
 from typing import Union
 
-from jose import JWTError
-from pydantic import BaseModel
+from jose import jwt
 from core.utils.MyUtils import MyUtils
 
 SECRET_KEY = MyUtils.loadProperties("secret_key")
 ALGORITHM = MyUtils.loadProperties("algorithm")
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class TokenData(BaseModel):
-    username: Union[str, None] = None
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
@@ -23,5 +14,5 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = JWTError.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
