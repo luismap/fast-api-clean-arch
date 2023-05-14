@@ -14,3 +14,8 @@ general:
 #local store
 localStore:
   dbFileName: test/post_fixtures.txt
+
+#auth, secret generated using openssl rand -hex 32
+secret_key: "802bddd74a68efa2982923f89e0fa3bfc9faf8ac9258937e7dbd16e66f97f7f3"
+algorithm: "HS256"
+access_token_expiration_minutes: 30

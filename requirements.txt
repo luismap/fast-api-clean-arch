@@ -13,4 +13,4 @@ coverage
 black
 mypy
 lint
-
+python-jose[cryptography]
