@@ -31,7 +31,7 @@ def verify_access_token(token: str, credentials_exception: Exception) -> TokenDa
         logger.info(f"verifying access for token {token}")
         payload = jwt.decode(token,SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("user_id")
-        logger.info(f"decoded user_id {token}")
+        logger.info(f"decoded user_id {user_id}")
 
         if not user_id:
             raise credentials_exception
@@ -41,7 +41,7 @@ def verify_access_token(token: str, credentials_exception: Exception) -> TokenDa
         raise credentials_exception
     return token_data
 
-def get_current_user(token: str = Depends(oauth2_scheme) ) -> TokenData:
+def get_current_user(token: Annotated[str, Depends(oauth2_scheme)] ) -> TokenData:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
