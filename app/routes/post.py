@@ -1,7 +1,8 @@
-from typing import List
+from typing import Annotated, List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 import yaml
+from app.auth.oauth2 import get_current_user
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
 from features.posts.data.controllers.UserPostController import UserPostController
@@ -17,6 +18,7 @@ from features.posts.domain.usecases.GetPosts import GetPosts
 from features.posts.domain.usecases.GetPostsById import GetPostsById
 from features.posts.domain.usecases.GetPostsIds import GetPostsIds
 from features.posts.domain.usecases.UpdatePosts import UpdatePosts
+from features.user.data.models.TokenModel import TokenData
 
 canlog = True
 appProps = MyUtils.loadProperties("general")["app"]
@@ -55,8 +57,10 @@ def get_posts():
     return parsedData
 
 @router.post("/create",status_code=201)
-def create_post(payload: PostCreateModel):
-    logger.info(payload)
+def create_post(payload: PostCreateModel, username : TokenData = Depends(get_current_user)):
+    logger.info(f"creating following payload {payload}")
+    logger.info(f"creating post as user {username}")
+
     parsedData = CreatePosts(userPostController).createPosts(payload)
     if not parsedData:
         raise HTTPException(404, "not able to create post")

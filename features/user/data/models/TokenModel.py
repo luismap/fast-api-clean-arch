@@ -7,4 +7,4 @@ class TokenModel(Token):
     pass
 
 class TokenData(BaseModel):
-    user_id: Union[str, None] = None
+    username: Union[str, None] = None
