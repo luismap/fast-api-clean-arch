@@ -7,7 +7,7 @@ from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
 from core.utils.MyUtils import MyUtils
-from features.posts.domain.entities.Post import PostCreate
+from features.posts.domain.entities.Post import PostCreate, PostRead
 
 class UserPostController(PostController):
 
@@ -24,7 +24,6 @@ class UserPostController(PostController):
         self.appState = self.appProps["env"]
         self.logger = logging.getLogger(self.appProps["logger"])
         if alchemyDS.isAvailable():
-            print("working with XXXXX")
             self.logger.info("using alchemy DS")
             self.activeDS = alchemyDS
         elif postgresDS.isAvailable():
@@ -35,14 +34,14 @@ class UserPostController(PostController):
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
-    def getPosts(self) -> Optional[list[PostModel]]:
+    def getPosts(self) -> Optional[list[PostRead]]:
         posts = self.activeDS.getPosts()
         return posts
 
     def dumpPosts(self,posts: list[PostCreate]):
         self.activeDS.dumpPosts(posts)
 
-    def getPost(self,id: int) -> PostModel:
+    def getPost(self,id: int) -> PostRead:
         post = self.activeDS.getPost(id)
         return post
 

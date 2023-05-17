@@ -9,7 +9,7 @@ from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from fastapi import Depends
-from features.posts.domain.entities.Post import PostCreate
+from features.posts.domain.entities.Post import PostCreate, PostRead
 import logging
 from core.db.AlchemySql import Base, SqlAlchemyAccessLayer
 
@@ -26,14 +26,14 @@ class PostsAlchemyDS(DataSource):
         self.logger.info("Alchemy Datasource initialized")
 
     def isAvailable(self) -> bool:
-        return False
+        return True
 
-    def getPosts(self) -> list[PostModel]:
+    def getPosts(self) -> list[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy).all()
         return posts
 
-    def getPost(self,userId: int) -> Optional[PostModel]:
+    def getPost(self,userId: int) -> Optional[PostRead]:
         with self.SessionLocal() as session:
             post = session.query(PostsAlmy).filter(PostsAlmy.id == userId).first()
         return post

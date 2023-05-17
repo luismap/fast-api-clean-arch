@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
-from features.posts.domain.entities.Post import PostCreate
+from features.posts.domain.entities.Post import PostCreate, PostRead
 
 
 class PostController(ABC):
@@ -15,7 +15,7 @@ class PostController(ABC):
         pass
 
     @abstractmethod
-    def getPost(self,id: int) -> PostModel:
+    def getPost(self,id: int) -> PostRead:
         pass
 
     @abstractmethod

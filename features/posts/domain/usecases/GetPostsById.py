@@ -4,6 +4,7 @@ import logging
 from core.utils.MyUtils import MyUtils
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
+from features.posts.domain.entities.Post import PostRead
 
 class GetPostsById:
     def __init__(self, postCtrl: PostController) -> None:
@@ -12,7 +13,7 @@ class GetPostsById:
         self.appProps = MyUtils.loadProperties("general")["app"]
         self.logger = logging.getLogger(appProps["logger"])
     
-    def getPostById(self,id: int) -> PostModel:
+    def getPostById(self,id: int) -> PostRead:
         data = self.postController.getPost(id)
         self.logger.info(f"for id {id} got content {data} ")
         return data

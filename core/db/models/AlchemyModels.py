@@ -7,7 +7,7 @@ from core.db.AlchemySql import Base
 
 
 class PostsAlmy(Base):
-    __tablename__ = "posts_almy"
+    __tablename__ = "posts"
     __table_args__ = {'schema': 'fast_api'}
 
     id = Column(Integer, primary_key=True, index=True)
@@ -15,11 +15,12 @@ class PostsAlmy(Base):
     content = Column(String)
     published = Column(Boolean, server_default="false")
     rating = Column(SmallInteger, server_default="0")
+    user_id = Column(Integer)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
 
 class UserAlmy(Base):
-    __tablename__="user_almy"
+    __tablename__="user"
     __table_args__= {'schema': 'fast_api'}
 
     user_id = Column(Integer, primary_key=True, index=True)

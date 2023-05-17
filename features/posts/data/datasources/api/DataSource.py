@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
-from features.posts.domain.entities.Post import PostCreate
+from features.posts.domain.entities.Post import PostCreate, PostRead
 
 class DataSource(ABC):
 
@@ -12,7 +12,7 @@ class DataSource(ABC):
         pass
 
     @abstractmethod
-    def getPosts(self) -> Optional[list[PostModel]]:
+    def getPosts(self) -> Optional[list[PostRead]]:
         pass
 
     @abstractmethod
@@ -20,7 +20,7 @@ class DataSource(ABC):
         pass
     
     @abstractmethod
-    def getPost(self,id: int) -> Optional[PostModel]:
+    def getPost(self,id: int) -> Optional[PostRead]:
         pass
 
     @abstractmethod
