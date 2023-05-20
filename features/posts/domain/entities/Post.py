@@ -13,7 +13,7 @@ class PostBase(BaseModel):
     published: bool = False
     rating: Optional[int] = None
     created_at: datetime = datetime.now()
-    user_id: int
+    user_id: int = -99
 
 class Post(PostBase):
     """Class to be use for Model design"""

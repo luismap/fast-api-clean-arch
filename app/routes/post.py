@@ -57,9 +57,11 @@ def get_posts():
     return parsedData
 
 @router.post("/create",status_code=201)
-def create_post(payload: PostCreateModel, username : Annotated[TokenData, Depends(get_current_user)]):
+def create_post(payload: PostCreateModel, token_data : Annotated[TokenData, Depends(get_current_user)]):
+    logger.info(f"creating post as user {token_data}")
+    payload.user_id = token_data.user_id
     logger.info(f"creating following payload {payload}")
-    logger.info(f"creating post as user {username}")
+
 
     parsedData = CreatePosts(userPostController).createPosts(payload)
     if not parsedData:
