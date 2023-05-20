@@ -24,13 +24,13 @@ class UserPostController(PostController):
         self.appState = self.appProps["env"]
         self.logger = logging.getLogger(self.appProps["logger"])
         if alchemyDS.isAvailable():
-            self.logger.info("using alchemy DS")
+            self.logger.info("using POST alchemy DS")
             self.activeDS = alchemyDS
         elif postgresDS.isAvailable():
-            self.logger.info("using postgres DS")
+            self.logger.info("using POSTGRES DS")
             self.activeDS = postgresDS 
         elif localDS.isAvailable():
-            self.logger.info("using localDb")
+            self.logger.info("using LOCALDB")
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
