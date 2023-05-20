@@ -1,7 +1,7 @@
 
 import logging
 from typing import List, Optional
-from core.utils import MyUtils
+from core.utils.MyUtils import MyUtils
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.controllers.PostsController import PostController
@@ -13,7 +13,6 @@ class PostCrud:
     def __init__(self, postCtrl: PostController) -> None:
         self.postController = postCtrl
         appProps = MyUtils.loadProperties(key="general")["app"]
-        self.postController = postCtrl
         self.appProps = MyUtils.loadProperties("general")["app"]
         self.logger = logging.getLogger(appProps["logger"])
 
@@ -32,7 +31,7 @@ class PostCrud:
         return data
     
     def getPostsIds(self) -> Optional[list[int]]:
-        data = self.postCtrl.getPosts()
+        data = self.postController.getPosts()
         if data:
             return [e.id for e in data]
         else:
