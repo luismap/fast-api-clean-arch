@@ -1,5 +1,5 @@
 
-from sqlalchemy import Boolean, Column, TIMESTAMP, Integer, String, SmallInteger
+from sqlalchemy import Boolean, Column, TIMESTAMP, ForeignKey, Integer, String, SmallInteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import text, func
 
@@ -15,7 +15,7 @@ class PostsAlmy(Base):
     content = Column(String)
     published = Column(Boolean, server_default="false")
     rating = Column(SmallInteger, server_default="0")
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("fast_api.user.user_id"), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
 
