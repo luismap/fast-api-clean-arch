@@ -81,6 +81,12 @@ class PostsAlchemyDS(DataSource):
                 else:
                     raise Exception("can only delete your own posts")
         return postDel
+    
+    def getPostByUser(self, user_id: int) -> list[PostRead]:
+        with self.SessionLocal as session:
+            posts = session.query(PostsAlmy).filter(PostsAlmy.user_id == user_id).all()
+        return posts
+    
             
 
 """
