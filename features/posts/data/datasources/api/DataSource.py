@@ -7,30 +7,34 @@ from features.posts.domain.entities.Post import PostCreate, PostRead
 
 class DataSource(ABC):
 
-    @abstractmethod
+    @classmethod
     def isAvailable(self) -> bool:
         pass
 
-    @abstractmethod
+    @classmethod
     def getPosts(self) -> Optional[list[PostRead]]:
         pass
 
-    @abstractmethod
+    @classmethod
     def dumpPosts(self,posts: list[PostCreateModel]):
         pass
     
-    @abstractmethod
+    @classmethod
     def getPost(self,id: int) -> Optional[PostRead]:
         pass
 
-    @abstractmethod
+    @classmethod
     def createPost(self,post: PostCreateModel) -> bool:
         pass
 
-    @abstractmethod
+    @classmethod
     def updatePost(self,id: int, post: dict) -> bool:
         pass
 
-    @abstractmethod
-    def deletePost(self,postId: int ) -> Optional[PostModel]:
+    @classmethod
+    def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
+        pass
+
+    @classmethod
+    def getPostByUser(user_id: int) -> list[PostRead]:
         pass

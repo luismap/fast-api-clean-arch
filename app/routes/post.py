@@ -12,6 +12,7 @@ from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostResponseModel import PostResponseModel
+from features.posts.domain.entities.Post import PostRead
 from features.posts.domain.usecases.CreatePosts import CreatePosts
 from features.posts.domain.usecases.DeletePosts import DeletePost
 from features.posts.domain.usecases.GetPosts import GetPosts
@@ -83,9 +84,9 @@ def get_post_id(id: int):
     return post
 
 @router.delete("/{id}")
-def delete_post(id: int):
-    logger.info(f"deleting post with id: {id}")
-    deleted = DeletePost(userPostController).deletePost(id)
+def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_user)]):
+    logger.info(f"deleting post with id: {id} by user: {token_data.user_id}")
+    deleted = DeletePost(userPostController).deletePost(id, token_data.user_id)
     if not deleted:
         raise HTTPException(404, detail=f"fail to delete id {id}")
     return {"deleted": deleted}
@@ -99,3 +100,7 @@ def update_post(id: int, post: dict):
     if not updated:
          raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}
+
+@router.get("/my")
+def get_my_posts(token_data: Annotated[TokenData, Depends(get_current_user)]) -> List[PostRead]:
+    pass

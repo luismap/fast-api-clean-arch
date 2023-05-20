@@ -70,13 +70,16 @@ class PostsAlchemyDS(DataSource):
                 self.logger.info(e)
         return ans
 
-    def deletePost(self, postId: int ) -> Optional[PostModel]:
+    def deletePost(self, postId: int, as_user: int ) -> Optional[PostModel]:
         with self.SessionLocal() as session:
             postDel = self.getPost(postId)
-            self.logger.info(f"deleting {postDel}")
             if postDel:#if not None
-                session.delete(postDel)
-                session.commit()
+                if postDel.user_id == as_user:
+                    self.logger.info(f"deleting {postDel}")
+                    session.delete(postDel)
+                    session.commit()
+                else:
+                    raise Exception("can only delete your own posts")
         return postDel
             
 
