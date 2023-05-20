@@ -1,6 +1,6 @@
 
 from tkinter import SE
-from typing import Optional
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from core.db.Postgres import PostgresConn
 from core.db.models.AlchemyModels import PostsAlmy
@@ -28,7 +28,7 @@ class PostsAlchemyDS(DataSource):
     def isAvailable(self) -> bool:
         return True
 
-    def getPosts(self) -> list[PostRead]:
+    def getPosts(self) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy).all()
         return posts
@@ -82,7 +82,7 @@ class PostsAlchemyDS(DataSource):
                     raise Exception("can only delete your own posts")
         return postDel
     
-    def getPostByUser(self, user_id: int) -> list[PostRead]:
+    def getPostByUser(self, user_id: int) -> List[PostRead]:
         with self.SessionLocal as session:
             posts = session.query(PostsAlmy).filter(PostsAlmy.user_id == user_id).all()
         return posts
