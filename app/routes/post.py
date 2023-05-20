@@ -13,12 +13,7 @@ from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostResponseModel import PostResponseModel
 from features.posts.domain.entities.Post import PostRead
-from features.posts.domain.usecases.CreatePosts import CreatePosts
-from features.posts.domain.usecases.DeletePosts import DeletePost
-from features.posts.domain.usecases.GetPosts import GetPosts
-from features.posts.domain.usecases.GetPostsById import GetPostsById
-from features.posts.domain.usecases.GetPostsIds import GetPostsIds
-from features.posts.domain.usecases.UpdatePosts import UpdatePosts
+from features.posts.domain.usecases.PostCrud import PostCrud
 from features.user.data.models.TokenModel import TokenData
 
 canlog = True
@@ -53,7 +48,7 @@ router = APIRouter(
 
 @router.get("/", response_model=List[PostResponseModel])
 def get_posts():
-    parsedData = GetPosts(userPostController).getPosts()
+    parsedData = PostCrud(userPostController).getPosts()
     logger.info(parsedData)
     return parsedData
 
@@ -64,21 +59,21 @@ def create_post(payload: PostCreateModel, token_data : Annotated[TokenData, Depe
     logger.info(f"creating following payload {payload}")
 
 
-    parsedData = CreatePosts(userPostController).createPosts(payload)
+    parsedData = PostCrud(userPostController).createPosts(payload)
     if not parsedData:
         raise HTTPException(404, "not able to create post")
     return {"added": parsedData}
 
 @router.get("/ids")
 def get_post():
-    ids = GetPostsIds(userPostController).getPostsIds()
+    ids = PostCrud(userPostController).getPostsIds()
     logger.info(ids)
     return {"postsIds": ids}
 
 @router.get("/{id}", response_model=PostResponseModel)
 def get_post_id(id: int):
     logger.info(f"retriving id {id}")
-    post = GetPostsById(userPostController).getPostById(id)
+    post = PostCrud(userPostController).getPostById(id)
     if not post: 
         raise HTTPException(404, detail=f"post id: {id} not found")
     return post
@@ -86,7 +81,7 @@ def get_post_id(id: int):
 @router.delete("/{id}")
 def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_user)]):
     logger.info(f"deleting post with id: {id} by user: {token_data.user_id}")
-    deleted = DeletePost(userPostController).deletePost(id, token_data.user_id)
+    deleted = PostCrud(userPostController).deletePost(id, token_data.user_id)
     if not deleted:
         raise HTTPException(404, detail=f"fail to delete id {id}")
     return {"deleted": deleted}
@@ -96,7 +91,7 @@ def update_post(id: int, post: dict):
     logger.info(f"updating for id {id} with data {post} type {type(post)}")
     if not id: 
         raise HTTPException(404, detail=f"post id: {id} not passed")
-    updated = UpdatePosts(userPostController).update(id, post)
+    updated = PostCrud(userPostController).update(id, post)
     if not updated:
          raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}
