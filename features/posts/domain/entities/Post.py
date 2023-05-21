@@ -48,6 +48,7 @@ class PostResponse(BaseModel):
     """
     Pydantic use for api response
     """
+    id: int
     title: str
     content: str
     user_id: int

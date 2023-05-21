@@ -4,6 +4,23 @@
 class CreatePostError(Exception):
     """Error creating Post"""
 
+class DeletePostException(Exception):
+    def __init__(self, id: int, message="cannot delete other post"):
+        """
+        Cannot delete other Posts Exception.
+
+        Args:
+            id (int): post id to delete
+            message (str, optional): input message. Defaults to "cannot delete others post".
+        """
+        self.id = id
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f'{self.id} -> {self.message}'
+
+
 class IdNotFound(Exception):
     def __init__(self, id: int, message="id not found"):
         """

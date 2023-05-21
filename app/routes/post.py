@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 import yaml
 from app.auth.oauth2 import get_current_user
 from core.db.Postgres import PostgresConn
+from core.failures.MyExeptions import DeletePostException
 from core.utils.MyUtils import MyUtils
 from features.posts.data.controllers.UserPostController import UserPostController
 import logging
@@ -89,9 +90,12 @@ def get_post_id(id: int):
 @router.delete("/{id}")
 def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_user)]):
     logger.info(f"deleting post with id: {id} by user: {token_data.user_id}")
-    deleted = PostCrud(userPostController).deletePost(id, token_data.user_id)
+    try:
+        deleted = PostCrud(userPostController).deletePost(id, int(token_data.user_id))
+    except DeletePostException as e:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, e.message)
     if not deleted:
-        raise HTTPException(404, detail=f"fail to delete id {id}")
+        raise HTTPException(404, detail=f"post id {id} not found")
     return {"deleted": deleted}
 
 @router.put("/{id}")

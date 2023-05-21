@@ -4,6 +4,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from core.db.Postgres import PostgresConn
 from core.db.models.AlchemyModels import PostsAlmy
+from core.failures.MyExeptions import DeletePostException
 from core.utils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostCreateModel import PostCreateModel
@@ -79,7 +80,7 @@ class PostsAlchemyDS(DataSource):
                     session.delete(postDel)
                     session.commit()
                 else:
-                    raise Exception("can only delete your own posts")
+                    raise DeletePostException(postId)
         return postDel
     
     def getPostByUser(self, user_id: int) -> List[PostRead]:
