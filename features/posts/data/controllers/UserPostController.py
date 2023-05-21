@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import List, Optional
 from features.posts.data.datasources.PostsAlchemyDS import PostsAlchemyDS
 from features.posts.data.datasources.PostsLocalDS import PostsLocalDataSource
 from features.posts.data.datasources.PostsPostgresDS import PostsPostgresDS
@@ -51,5 +51,9 @@ class UserPostController(PostController):
     def updatePost(self,id: int, post: dict) -> bool:
         return self.activeDS.updatePost(id, post)
 
-    def deletePost(self,postId: int ) -> Optional[PostModel]:
-        return self.activeDS.deletePost(postId)
+    def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
+        return self.activeDS.deletePost(postId, as_user)
+    
+    def get_post_by_user(self, as_user: int) -> List[PostRead]:
+        return self.activeDS.getPostByUser(as_user)
+

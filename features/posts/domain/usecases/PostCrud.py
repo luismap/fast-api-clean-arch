@@ -40,3 +40,6 @@ class PostCrud:
     def update(self, id: int, post: dict) -> bool:
         ans = self.postController.updatePost(id, post)
         return ans
+
+    def get_post_by_user(self, as_user: int) -> List[PostRead]:
+        return self.postController.get_post_by_user(as_user)

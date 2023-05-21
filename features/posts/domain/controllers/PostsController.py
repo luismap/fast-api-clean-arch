@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import List, Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 from features.posts.domain.entities.Post import PostCreate, PostRead
@@ -7,11 +7,11 @@ from features.posts.domain.entities.Post import PostCreate, PostRead
 
 class PostController(ABC):
     @abstractmethod
-    def getPosts(self) -> Optional[list[PostModel]]:
+    def getPosts(self) -> Optional[List[PostModel]]:
         pass
 
     @abstractmethod
-    def dumpPosts(self,posts: list[PostCreate]):
+    def dumpPosts(self,posts: List[PostCreate]):
         pass
 
     @abstractmethod
@@ -28,4 +28,8 @@ class PostController(ABC):
 
     @abstractmethod
     def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
+        pass
+
+    @classmethod
+    def get_post_by_user(as_user: int) -> List[PostRead]:
         pass

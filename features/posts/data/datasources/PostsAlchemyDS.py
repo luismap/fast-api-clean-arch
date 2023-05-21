@@ -83,7 +83,7 @@ class PostsAlchemyDS(DataSource):
         return postDel
     
     def getPostByUser(self, user_id: int) -> List[PostRead]:
-        with self.SessionLocal as session:
+        with self.SessionLocal() as session:
             posts = session.query(PostsAlmy).filter(PostsAlmy.user_id == user_id).all()
         return posts
     

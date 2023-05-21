@@ -1,6 +1,6 @@
 from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 import yaml
 from app.auth.oauth2 import get_current_user
 from core.db.Postgres import PostgresConn
@@ -70,6 +70,14 @@ def get_post():
     logger.info(ids)
     return {"postsIds": ids}
 
+@router.get("/my", response_model=List[PostResponseModel])
+def get_my_posts(token_data: Annotated[TokenData, Depends(get_current_user)]) -> List[PostRead]:
+    logger.info(f"getting user's posts for {token_data.user_id}")
+    posts = PostCrud(userPostController).get_post_by_user(token_data.user_id)
+    if not posts:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="not post found for user")
+    return posts
+
 @router.get("/{id}", response_model=PostResponseModel)
 def get_post_id(id: int):
     logger.info(f"retriving id {id}")
@@ -96,6 +104,3 @@ def update_post(id: int, post: dict):
          raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}
 
-@router.get("/my")
-def get_my_posts(token_data: Annotated[TokenData, Depends(get_current_user)]) -> List[PostRead]:
-    pass
