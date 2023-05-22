@@ -28,7 +28,7 @@ class DataSource(ABC):
         pass
 
     @classmethod
-    def updatePost(self,id: int, post: dict) -> bool:
+    def updatePost(self,id: int, post: dict, as_user: int) -> bool:
         pass
 
     @classmethod

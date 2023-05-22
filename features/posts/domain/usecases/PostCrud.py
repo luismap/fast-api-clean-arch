@@ -37,8 +37,8 @@ class PostCrud:
         else:
             return None
         
-    def update(self, id: int, post: dict) -> bool:
-        ans = self.postController.updatePost(id, post)
+    def update(self, id: int, post: dict, as_user: int) -> bool:
+        ans = self.postController.updatePost(id, post, as_user)
         return ans
 
     def get_post_by_user(self, as_user: int) -> List[PostRead]:

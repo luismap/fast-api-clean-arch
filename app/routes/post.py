@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 import yaml
 from app.auth.oauth2 import get_current_user
 from core.db.Postgres import PostgresConn
-from core.failures.MyExeptions import DeletePostException
+from core.failures.MyExeptions import DeletePostException, UpdatePostException
 from core.utils.MyUtils import MyUtils
 from features.posts.data.controllers.UserPostController import UserPostController
 import logging
@@ -98,12 +98,15 @@ def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_us
         raise HTTPException(404, detail=f"post id {id} not found")
     return {"deleted": deleted}
 
-@router.put("/{id}")
-def update_post(id: int, post: dict):
-    logger.info(f"updating for id {id} with data {post} type {type(post)}")
+@router.put("/{post_id}")
+def update_post(post_id: int, post: dict, as_user: Annotated[TokenData, Depends(get_current_user)]):
+    logger.info(f"updating post {post_id} with data {post} as user {as_user.user_id}")
     if not id: 
-        raise HTTPException(404, detail=f"post id: {id} not passed")
-    updated = PostCrud(userPostController).update(id, post)
+        raise HTTPException(404, detail=f"post id: {post_id} not passed")
+    try:
+        updated = PostCrud(userPostController).update(post_id, post, int(as_user.user_id))
+    except UpdatePostException as e:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, e.message)
     if not updated:
          raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}

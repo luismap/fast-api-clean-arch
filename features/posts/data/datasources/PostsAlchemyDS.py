@@ -4,7 +4,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from core.db.Postgres import PostgresConn
 from core.db.models.AlchemyModels import PostsAlmy
-from core.failures.MyExeptions import DeletePostException
+from core.failures.MyExeptions import DeletePostException, UpdatePostException
 from core.utils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostCreateModel import PostCreateModel
@@ -55,13 +55,20 @@ class PostsAlchemyDS(DataSource):
                 ans = False
         return ans
 
-    def updatePost(self, id: int, post: dict) -> bool:
+    def updatePost(self, id: int, post: dict, as_user: int) -> bool:
         ans = False
+        post_check = lambda p: p.id == id
+        user_posts = [e for e in filter(post_check, self.getPostByUser(as_user))]
+        logging.info(f"user post are {user_posts}")
+
+        if not user_posts:
+            raise UpdatePostException(id)
+        
         with self.SessionLocal() as session:
             try:
                 update = session\
                     .query(PostsAlmy)\
-                    .filter(PostsAlmy.id == id)\
+                    .filter(PostsAlmy.id == id, PostsAlmy.user_id == as_user)\
                     .update(post,synchronize_session="fetch") 
                 self.logger.info(f"updating for {update}")
                 session.commit()

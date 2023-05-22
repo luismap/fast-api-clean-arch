@@ -48,8 +48,8 @@ class UserPostController(PostController):
     def createPost(self,post: PostCreateModel) -> bool:
         return self.activeDS.createPost(post)
    
-    def updatePost(self,id: int, post: dict) -> bool:
-        return self.activeDS.updatePost(id, post)
+    def updatePost(self,id: int, post: dict, as_user: int) -> bool:
+        return self.activeDS.updatePost(id, post, as_user)
 
     def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
         return self.activeDS.deletePost(postId, as_user)
