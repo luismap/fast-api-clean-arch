@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
+from features.user.data.models.UserModel import UserResponse
+
 
 class PostBase(BaseModel):
     """common attributes while creating or reading data."""
@@ -52,6 +54,7 @@ class PostResponse(BaseModel):
     title: str
     content: str
     user_id: int
+    user: UserResponse
     #published: bool = False
     #rating: Optional[int] = None
     #created_at: datetime = datetime.now()

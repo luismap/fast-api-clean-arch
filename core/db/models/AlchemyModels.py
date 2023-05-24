@@ -17,7 +17,10 @@ class PostsAlmy(Base):
     rating = Column(SmallInteger, server_default="0")
     user_id = Column(Integer, ForeignKey("fast_api.user.user_id"), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now())
-
+    #use relationship to expand model desing
+    #by using lazy joined, we will trigger the join at model creation time
+    #will consume more space, (refactor, use proxy pattern)
+    user = relationship("UserAlmy", lazy="joined")
 
 class UserAlmy(Base):
     __tablename__="user"
