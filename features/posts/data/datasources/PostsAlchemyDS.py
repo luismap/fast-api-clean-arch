@@ -29,10 +29,13 @@ class PostsAlchemyDS(DataSource):
     def isAvailable(self) -> bool:
         return True
 
-    def getPosts(self, limit: int) -> List[PostRead]:
+    def getPosts(self,
+                limit: int,
+                offset: int) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy)\
                 .limit(limit)\
+                .offset(offset)\
                 .all()
         return posts
 
@@ -92,11 +95,15 @@ class PostsAlchemyDS(DataSource):
                     raise DeletePostException(postId)
         return postDel
     
-    def getPostByUser(self, user_id: int, limit: int) -> List[PostRead]:
+    def getPostByUser(self,
+                    user_id: int,
+                    limit: int,
+                    offset: int) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy)\
             .filter(PostsAlmy.user_id == user_id)\
             .limit(limit)\
+            .offset(offset)\
             .all()
         return posts
     
