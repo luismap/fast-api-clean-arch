@@ -12,7 +12,7 @@ class DataSource(ABC):
         pass
 
     @classmethod
-    def getPosts(self) -> Optional[list[PostRead]]:
+    def getPosts(self, limit: int) -> Optional[list[PostRead]]:
         pass
 
     @classmethod
@@ -36,5 +36,5 @@ class DataSource(ABC):
         pass
 
     @classmethod
-    def getPostByUser(user_id: int) -> list[PostRead]:
+    def getPostByUser(user_id: int, limit: int) -> list[PostRead]:
         pass

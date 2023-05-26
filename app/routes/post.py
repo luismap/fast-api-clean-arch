@@ -48,8 +48,8 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[PostResponseModel])
-def get_posts():
-    parsedData = PostCrud(userPostController).getPosts()
+def get_posts(limit: int = 10):
+    parsedData = PostCrud(userPostController).getPosts(limit)
     logger.info(parsedData)
     return parsedData
 
@@ -72,9 +72,11 @@ def get_post():
     return {"postsIds": ids}
 
 @router.get("/my", response_model=List[PostResponseModel])
-def get_my_posts(token_data: Annotated[TokenData, Depends(get_current_user)]) -> List[PostRead]:
+def get_my_posts(
+    token_data: Annotated[TokenData, Depends(get_current_user)],
+    limit: int = 10) -> List[PostRead]:
     logger.info(f"getting user's posts for {token_data.user_id}")
-    posts = PostCrud(userPostController).get_post_by_user(token_data.user_id)
+    posts = PostCrud(userPostController).get_post_by_user(token_data.user_id, limit)
     if not posts:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="not post found for user")
     return posts

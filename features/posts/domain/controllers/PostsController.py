@@ -7,7 +7,7 @@ from features.posts.domain.entities.Post import PostCreate, PostRead
 
 class PostController(ABC):
     @abstractmethod
-    def getPosts(self) -> Optional[List[PostModel]]:
+    def getPosts(self, limit: int) -> Optional[List[PostModel]]:
         pass
 
     @abstractmethod
@@ -31,5 +31,5 @@ class PostController(ABC):
         pass
 
     @classmethod
-    def get_post_by_user(as_user: int) -> List[PostRead]:
+    def get_post_by_user(as_user: int, limit: int) -> List[PostRead]:
         pass

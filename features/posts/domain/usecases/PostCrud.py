@@ -22,8 +22,8 @@ class PostCrud:
     def deletePost(self, id: int, as_user: int) -> Optional[PostRead]:
         return self.postController.deletePost(id, as_user)
 
-    def getPosts(self) -> Optional[List[PostModel]]:
-        return self.postController.getPosts()
+    def getPosts(self, limit: int) -> Optional[List[PostModel]]:
+        return self.postController.getPosts(limit)
     
     def getPostById(self,id: int) -> PostRead:
         data = self.postController.getPost(id)
@@ -41,5 +41,5 @@ class PostCrud:
         ans = self.postController.updatePost(id, post, as_user)
         return ans
 
-    def get_post_by_user(self, as_user: int) -> List[PostRead]:
-        return self.postController.get_post_by_user(as_user)
+    def get_post_by_user(self, as_user: int, limit: int) -> List[PostRead]:
+        return self.postController.get_post_by_user(as_user, limit)

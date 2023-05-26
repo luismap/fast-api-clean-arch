@@ -34,8 +34,8 @@ class UserPostController(PostController):
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
-    def getPosts(self) -> Optional[list[PostRead]]:
-        posts = self.activeDS.getPosts()
+    def getPosts(self,limit: int) -> Optional[list[PostRead]]:
+        posts = self.activeDS.getPosts(limit)
         return posts
 
     def dumpPosts(self,posts: list[PostCreate]):
@@ -54,6 +54,6 @@ class UserPostController(PostController):
     def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
         return self.activeDS.deletePost(postId, as_user)
     
-    def get_post_by_user(self, as_user: int) -> List[PostRead]:
-        return self.activeDS.getPostByUser(as_user)
+    def get_post_by_user(self, as_user: int, limit: int) -> List[PostRead]:
+        return self.activeDS.getPostByUser(as_user,limit)
 
