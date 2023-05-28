@@ -36,8 +36,9 @@ class UserPostController(PostController):
 
     def getPosts(self,
                 limit: int,
-                offset: int) -> Optional[list[PostRead]]:
-        posts = self.activeDS.getPosts(limit, offset)
+                offset: int,
+                search_titel: Optional[str]) -> Optional[list[PostRead]]:
+        posts = self.activeDS.getPosts(limit, offset, search_titel)
         return posts
 
     def dumpPosts(self,posts: list[PostCreate]):
@@ -59,6 +60,7 @@ class UserPostController(PostController):
     def get_post_by_user(self,
                         as_user: int,
                         limit: int,
-                        offset: int) -> List[PostRead]:
-        return self.activeDS.getPostByUser(as_user, limit, offset)
+                        offset: int,
+                        search_titel: Optional[str]) -> List[PostRead]:
+        return self.activeDS.getPostByUser(as_user, limit, offset, search_titel)
 

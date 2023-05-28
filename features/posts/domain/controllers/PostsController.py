@@ -9,7 +9,8 @@ class PostController(ABC):
     @abstractmethod
     def getPosts(self,
                 limit: int,
-                offset: int) -> Optional[List[PostModel]]:
+                offset: int,
+                search_title: Optional[str]) -> Optional[List[PostModel]]:
         pass
 
     @abstractmethod
@@ -36,5 +37,6 @@ class PostController(ABC):
     def get_post_by_user(
         as_user: int,
         limit: int,
-        offset: int  ) -> List[PostRead]:
+        offset: int,
+        search_title: Optional[str]    ) -> List[PostRead]:
         pass

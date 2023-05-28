@@ -31,9 +31,12 @@ class PostsAlchemyDS(DataSource):
 
     def getPosts(self,
                 limit: int,
-                offset: int) -> List[PostRead]:
+                offset: int,
+                search_titel: Optional[str]
+                ) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy)\
+                .filter(PostsAlmy.title.contains(search_titel))\
                 .limit(limit)\
                 .offset(offset)\
                 .all()
@@ -98,10 +101,13 @@ class PostsAlchemyDS(DataSource):
     def getPostByUser(self,
                     user_id: int,
                     limit: int,
-                    offset: int) -> List[PostRead]:
+                    offset: int,
+                    search_titel: Optional[str]) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = session.query(PostsAlmy)\
-            .filter(PostsAlmy.user_id == user_id)\
+            .filter(
+                PostsAlmy.user_id == user_id,
+                PostsAlmy.title.contains(search_titel))\
             .limit(limit)\
             .offset(offset)\
             .all()

@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 import yaml
@@ -48,12 +48,15 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[PostResponseModel])
-def get_posts(limit: int = 10,
-              offset: int = 0
-              ):
+def get_posts(
+            limit: int = 10,
+            offset: int = 0,
+            search_title: Optional[str] = ""
+            ):
     parsedData = PostCrud(userPostController).getPosts(
         limit,
-        offset
+        offset,
+        search_title
         )
     logger.info(parsedData)
     return parsedData
@@ -80,13 +83,15 @@ def get_post():
 def get_my_posts(
     token_data: Annotated[TokenData, Depends(get_current_user)],
     limit: int = 10,
-    offset: int = 0
+    offset: int = 0,
+    search_title: Optional[str] = "",
     ) -> List[PostRead]:
     logger.info(f"getting user's posts for {token_data.user_id}")
     posts = PostCrud(userPostController).get_post_by_user(
         token_data.user_id,
         limit,
-        offset
+        offset,
+        search_title
         )
     if not posts:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="not post found for user")
