@@ -2,6 +2,7 @@
 
 import yaml
 from passlib.context import CryptContext
+import os
 
 crypt_context = CryptContext(schemes="bcrypt", deprecated="auto")
 
@@ -16,7 +17,10 @@ class MyUtils:
         with open("properties.yaml","r") as f:
             props = yaml.safe_load(f)
             return props[key]
-
+        
+    def get_from_os(var: str) -> str:
+        return os.getenv(var)
+    
     def hash(content: str) -> str:
         return crypt_context.hash(content)
 
