@@ -5,6 +5,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 from jose import JWTError, jwt
+from core.utils.Config import Settings
 from core.utils.MyUtils import MyUtils
 from features.user.data.models.TokenModel import TokenData, TokenModel
 
@@ -13,11 +14,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login") #returns only the token s
 
 appProps = MyUtils.loadProperties("general")["app"]
 logger = logging.getLogger(appProps["logger"])
+settings = Settings()
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
-    SECRET_KEY = MyUtils.get_from_os("secret_key")
-    ALGORITHM = MyUtils.get_from_os("algorithm")
-
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -25,15 +24,13 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
         expire = datetime.utcnow() + timedelta(minutes=15)
         user_id = data["user_id"]
     to_encode.update({"exp": expire, "user_id":user_id})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
 
 def verify_access_token(token: str, credentials_exception: Exception) -> TokenData:
-    SECRET_KEY = MyUtils.get_from_os("secret_key")
-    ALGORITHM = MyUtils.get_from_os("algorithm")
     try:
         logger.info(f"verifying access for token {token}")
-        payload = jwt.decode(token,SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token,settings.secret_key, algorithms=[settings.algorithm])
         user_id = payload.get("user_id")
         logger.info(f"decoded user_id {user_id}")
 
