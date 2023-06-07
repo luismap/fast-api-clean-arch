@@ -121,3 +121,29 @@ VALUES
 ('medicine', 'about the new content in placebo effect',2),
 ('robotics', 'the new down of AI',3);
 
+--votes section
+CREATE TABLE IF NOT EXISTS fast_api.votes
+(
+    post_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    CONSTRAINT post_id_fk FOREIGN KEY (post_id)
+        REFERENCES fast_api.products (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION,
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id)
+        REFERENCES fast_api."user" (user_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS fast_api.votes
+    OWNER to admin;
+
+INSERT INTO fast_api.votes(post_id, user_id)
+	VALUES 
+    (1, 1),
+    (1,2),
+    (2,3);
+
