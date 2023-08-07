@@ -30,3 +30,10 @@ class UserAlmy(Base):
     email = Column(String, nullable=False,unique=True)
     password = Column(String, nullable=False)
     created_at= Column(TIMESTAMP, server_default=func.now())
+
+class Votes(Base):
+    __tablename__="votes"
+    __table_args__={'schema': 'fast_api'}
+
+    user_id= Column(Integer, ForeignKey("fast_api.user.user_id",onupdate="CASCADE"), primary_key=True)
+    post_id= Column(Integer, ForeignKey("fast_api.posts.id",onupdate="CASCADE"), primary_key=True)
