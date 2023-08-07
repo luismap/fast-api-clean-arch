@@ -6,13 +6,12 @@ import os
 
 crypt_context = CryptContext(schemes="bcrypt", deprecated="auto")
 
-class MyUtils:
+class MyUtils:  
+    def __init__(self) -> None:
+        pass
     """
     given a top level key, get corresponding configs
     """
-    def __init__(self) -> None:
-        pass
-    
     def loadProperties(key: str) -> dict:
         with open("properties.yaml","r") as f:
             props = yaml.safe_load(f)
