@@ -5,7 +5,7 @@ from core.db.AlchemySql import Base, SqlAlchemyAccessLayer
 from core.db.Postgres import PostgresConn
 from core.db.models.AlchemyModels import Votes
 from features.votes.data.datasources.api.VotesDataSource import VotesDataSource
-from features.votes.domain.entities.Votes import VoteRead, VoteResponse
+from features.votes.data.models.VotesModel import VoteReadModel, VoteResponseModel
 
 
 class VotesAlchemyDS(VotesDataSource):
@@ -17,15 +17,13 @@ class VotesAlchemyDS(VotesDataSource):
         self.logger = logging.getLogger("api_dev")
         self.logger.info("Alchemy VoteDatasource initialized")
 
-    def get_votes(self) -> List[VoteResponse]:
+    def get_votes(self) -> List[VoteResponseModel]:
         with self.SessionLocal() as session:
             votes = session.query(Votes).all()
-            for vote in votes:
-                print(vote.user_id)
         return votes
 
-    def delete_vote(post_id: int) -> VoteResponse:
+    def delete_vote(post_id: int) -> VoteResponseModel:
         return super().delete_vote()
     
-    def get_user_votes(user_id: int) -> List[VoteRead]:
+    def get_user_votes(user_id: int) -> List[VoteReadModel]:
         return super().get_user_votes()

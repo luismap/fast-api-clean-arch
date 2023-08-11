@@ -1,18 +1,20 @@
 
 from abc import ABC, abstractmethod
 from typing import List
-from features.votes.domain.entities.Votes import VoteResponse
+
+from features.votes.data.models.VotesModel import VoteResponseModel
+
 
 
 class VotesController(ABC):
     @abstractmethod
-    def delete_vote(post_id: int) -> VoteResponse:
+    def delete_vote(post_id: int) -> VoteResponseModel:
         pass
 
     @abstractmethod
-    def vote(post_id: int) -> List[VoteResponse]:
+    def vote(post_id: int) -> List[VoteResponseModel]:
         pass
 
     @abstractmethod
-    def get_votes() -> List[VoteResponse]:
+    def get_votes() -> List[VoteResponseModel]:
         pass

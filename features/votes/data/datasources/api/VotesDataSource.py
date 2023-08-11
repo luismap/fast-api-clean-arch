@@ -2,18 +2,20 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from features.votes.domain.entities.Votes import VoteRead, VoteResponse
+from features.votes.data.models.VotesModel import VoteReadModel, VoteResponseModel
+
+
 
 
 class VotesDataSource(ABC):
     @abstractmethod
-    def get_user_votes(user_id: int) -> List[VoteRead]:
+    def get_user_votes(user_id: int) -> List[VoteReadModel]:
         pass
 
     @abstractmethod
-    def delete_vote(post_id: int) -> VoteResponse:
+    def delete_vote(post_id: int) -> VoteResponseModel:
         pass
 
     @abstractmethod
-    def get_votes() -> List[VoteRead]:
+    def get_votes() -> List[VoteReadModel]:
         pass

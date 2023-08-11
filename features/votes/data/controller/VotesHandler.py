@@ -4,8 +4,9 @@ import logging
 from typing import List
 from core.utils.MyUtils import MyUtils
 from features.votes.data.datasources.VotesAlchemyDS import VotesAlchemyDS
+from features.votes.data.models.VotesModel import VoteResponseModel
 from features.votes.domain.controller.VotesController import VotesController
-from features.votes.domain.entities.Votes import VoteResponse
+
 
 
 class VotesHandler(VotesController):
@@ -16,11 +17,11 @@ class VotesHandler(VotesController):
         self.data_source = vote_alchemy_ds
         self.logger.info("using votes alchemy data source")
     
-    def get_votes(self) -> List[VoteResponse]:
+    def get_votes(self) -> List[VoteResponseModel]:
         return self.data_source.get_votes()
     
-    def delete_vote(post_id: int) -> VoteResponse:
+    def delete_vote(post_id: int) -> VoteResponseModel:
         return super().delete_vote()
     
-    def vote(post_id: int) -> List[VoteResponse]:
+    def vote(post_id: int) -> List[VoteResponseModel]:
         return super().vote()

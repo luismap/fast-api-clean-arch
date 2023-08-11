@@ -1,13 +1,15 @@
 
-from typing import List
+from typing import Annotated, List
 import logging
-from fastapi import APIRouter, HTTPException,status
+from fastapi import APIRouter, Depends, HTTPException,status
+from app.auth.oauth2 import get_current_user
 from core.db.Postgres import PostgresConn
 from core.utils.MyUtils import MyUtils
+from features.user.data.models.TokenModel import TokenModel
 
 from features.votes.data.controller.VotesHandler import VotesHandler
 from features.votes.data.datasources.VotesAlchemyDS import VotesAlchemyDS
-from features.votes.domain.entities.Votes import VoteResponse
+from features.votes.data.models.VotesModel import VoteResponseModel
 from features.votes.domain.usecase.VotesCrud import VotesCrud
 
 canlog = True
@@ -27,9 +29,9 @@ router = APIRouter(
 )
 
 #votes section
-@router.get("/",response_model=List[VoteResponse], status_code=status.HTTP_202_ACCEPTED)
-def get_votes():
-    logger.info(f"retriving votes")
+@router.get("/",response_model=List[VoteResponseModel], status_code=status.HTTP_202_ACCEPTED)
+def get_votes(current_user: Annotated[TokenModel, Depends(get_current_user)]):
+    logger.info(f"retriving votes for user {current_user.user}")
     votes = VotesCrud(votes_handler).get_votes()
     if not votes:
         raise HTTPException(404, detail=f"no votes found")
