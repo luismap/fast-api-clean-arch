@@ -30,9 +30,17 @@ router = APIRouter(
 
 #votes section
 @router.get("/",response_model=List[VoteResponseModel], status_code=status.HTTP_202_ACCEPTED)
-def get_votes(current_user: Annotated[TokenModel, Depends(get_current_user)]):
-    logger.info(f"retriving votes for user {current_user.user}")
+def get_votes(token_model: Annotated[TokenModel, Depends(get_current_user)]):
+    logger.info(f"retriving votes as user {token_model.user_id}")
     votes = VotesCrud(votes_handler).get_votes()
+    if not votes:
+        raise HTTPException(404, detail=f"no votes found")
+    return votes
+
+@router.get("/my", response_model=List[VoteResponseModel], status_code=status.HTTP_202_ACCEPTED)
+def get_my_votes(token_model: Annotated[TokenModel, Depends(get_current_user)]):
+    logger.info(f"retriving votes of user {token_model.user_id}")
+    votes = VotesCrud(votes_handler).get_my_votes(token_model.user_id)
     if not votes:
         raise HTTPException(404, detail=f"no votes found")
     return votes

@@ -25,5 +25,7 @@ class VotesAlchemyDS(VotesDataSource):
     def delete_vote(post_id: int) -> VoteResponseModel:
         return super().delete_vote()
     
-    def get_user_votes(user_id: int) -> List[VoteReadModel]:
-        return super().get_user_votes()
+    def get_my_votes(self, user_id: int) -> List[VoteReadModel]:
+        with self.SessionLocal() as session:
+            votes = session.query(Votes).filter(Votes.user_id == user_id).all()
+        return votes

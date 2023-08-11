@@ -25,3 +25,6 @@ class VotesHandler(VotesController):
     
     def vote(post_id: int) -> List[VoteResponseModel]:
         return super().vote()
+    
+    def get_my_votes(self, user_id: int) -> List[VoteResponseModel]:
+        return self.data_source.get_my_votes(user_id)

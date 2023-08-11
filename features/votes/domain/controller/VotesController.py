@@ -18,3 +18,7 @@ class VotesController(ABC):
     @abstractmethod
     def get_votes() -> List[VoteResponseModel]:
         pass
+
+    @abstractmethod
+    def get_my_votes(user_id: int) -> List[VoteResponseModel]:
+        pass
