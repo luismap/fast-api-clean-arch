@@ -12,7 +12,7 @@ class VotesController(ABC):
         pass
 
     @abstractmethod
-    def vote(post_id: int) -> List[VoteResponseModel]:
+    def vote(post_id: int, user_id: int, direction: bool) -> List[VoteResponseModel]:
         pass
 
     @abstractmethod

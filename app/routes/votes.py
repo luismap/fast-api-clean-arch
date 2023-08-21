@@ -44,3 +44,15 @@ def get_my_votes(token_model: Annotated[TokenModel, Depends(get_current_user)]):
     if not votes:
         raise HTTPException(404, detail=f"no votes found")
     return votes
+
+@router.get("/vote", response_model=VoteResponseModel, status_code=status.HTTP_200_OK)
+def vote(post_id:int, 
+         direction:bool, 
+         token_model: Annotated[TokenModel, Depends(get_current_user)]):
+    user_id = token_model.user_id
+    logger.info(f"user f{user_id} voting {direction} for post {post_id}")
+    vote = VotesCrud(votes_handler).create_vote(post_id, user_id,direction)
+
+    if (not vote):
+        raise HTTPException(status.HTTP_409_CONFLICT, "received None from backend")
+    return vote

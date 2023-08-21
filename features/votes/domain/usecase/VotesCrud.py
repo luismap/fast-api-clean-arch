@@ -14,3 +14,6 @@ class VotesCrud():
     
     def get_my_votes(self, user_id: int) -> List[VoteResponseModel]:
         return self.votes_handler.get_my_votes(user_id)
+    
+    def create_vote(self, post_id, user_id, direction:bool) -> VoteResponseModel:
+        return self.votes_handler.vote(post_id,user_id, direction)

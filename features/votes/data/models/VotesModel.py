@@ -5,10 +5,12 @@ from features.votes.domain.entities.Vote import Vote
 
 
 class VoteModel(Vote):
-    pass
+    class Config:
+        orm_mode=True
 
 class VoteReadModel(Vote):
-    pass
+    class Config:
+        orm_mode=True
 
 class VoteResponseModel(BaseModel):
     user_id: int

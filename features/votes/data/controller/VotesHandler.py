@@ -23,8 +23,8 @@ class VotesHandler(VotesController):
     def delete_vote(post_id: int) -> VoteResponseModel:
         return super().delete_vote()
     
-    def vote(post_id: int) -> List[VoteResponseModel]:
-        return super().vote()
+    def vote(self,post_id: int, user_id, direction: bool) -> List[VoteResponseModel]:
+        return self.data_source.vote(post_id, user_id, direction)
     
     def get_my_votes(self, user_id: int) -> List[VoteResponseModel]:
         return self.data_source.get_my_votes(user_id)

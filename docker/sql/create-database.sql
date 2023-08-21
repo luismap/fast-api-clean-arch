@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS fast_api.votes
     post_id bigint NOT NULL,
     user_id bigint NOT NULL,
     CONSTRAINT post_id_fk FOREIGN KEY (post_id)
-        REFERENCES fast_api.products (id) MATCH SIMPLE
+        REFERENCES fast_api.posts (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE NO ACTION,
     CONSTRAINT user_id_fk FOREIGN KEY (user_id)
