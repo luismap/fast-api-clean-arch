@@ -1,4 +1,3 @@
-
 import json
 import pytest
 
@@ -8,11 +7,12 @@ from core.utils import MyUtils
 from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 
-sqlal = SqlAlchemyAccessLayer('sqlite:///')
+sqlal = SqlAlchemyAccessLayer("sqlite:///")
 sqlal.engine.connect()
 
 with open("test/local_db_test_data.json", "r") as f:
     local_data = json.load(f)["data"]
+
 
 @pytest.fixture
 def setup():
@@ -22,16 +22,18 @@ def setup():
     Base.metadata.create_all(bind=sqlal.engine)
     return sqlal.SessionLocal()
 
+
 @pytest.fixture
 def teardown(setup):
     setup.remove()
+
 
 def test_model_is_save(setup):
     session = setup
     row = PostsAlmy(**PostCreateModel(**local_data[0]).dict())
     session.commit()
     data = session.query(PostsAlmy).first()
-    #row.content = "new content"
+    # row.content = "new content"
     content1 = PostModel.from_orm(row)
     content2 = PostModel.from_orm(data)
-    assert(content1.dict() == content2.dict())
+    assert content1.dict() == content2.dict()
