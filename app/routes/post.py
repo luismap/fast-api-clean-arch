@@ -23,7 +23,7 @@ logger = logging.getLogger(appProps["logger"])
 
 # Initialize the logger once as the application starts up
 # because dependencies, configure logger in first route called in app.main
-with open("logging.yaml", 'rt') as f:
+with open("logging.yaml", "rt") as f:
     config = yaml.safe_load(f.read())
     logging.config.dictConfig(config)
 
@@ -33,8 +33,7 @@ logger = logging.getLogger(appProps["logger"])
 logger.info("Initial log config in route post!")
 
 
-
-#db conn
+# db conn
 postgreConn = PostgresConn()
 
 # user postController
@@ -42,36 +41,30 @@ alchemyDS = PostsAlchemyDS(postgreConn)
 localDS = PostsLocalDataSource()
 postgresDS = PostsPostgresDS()
 userPostController = UserPostController(localDS, postgresDS, alchemyDS)
-router = APIRouter(
-    prefix="/posts",
-    tags=['posts']
-)
+router = APIRouter(prefix="/posts", tags=["posts"])
+
 
 @router.get("/", response_model=List[PostResponseModel])
-def get_posts(
-            limit: int = 10,
-            offset: int = 0,
-            search_title: Optional[str] = ""
-            ):
-    parsedData = PostCrud(userPostController).getPosts(
-        limit,
-        offset,
-        search_title
-        )
+def get_posts(limit: int = 10, offset: int = 0, search_title: Optional[str] = ""):
+    parsedData = PostCrud(userPostController).getPosts(limit, offset, search_title)
     logger.info(parsedData)
     return parsedData
 
-@router.post("/create",status_code=201)
-def create_post(payload: PostCreateModel, token_data : Annotated[TokenData, Depends(get_current_user)]):
+
+@router.post("/create", status_code=201)
+def create_post(
+    payload: PostCreateModel,
+    token_data: Annotated[TokenData, Depends(get_current_user)],
+):
     logger.info(f"creating post as user {token_data}")
     payload.user_id = token_data.user_id
     logger.info(f"creating following payload {payload}")
-
 
     parsedData = PostCrud(userPostController).createPosts(payload)
     if not parsedData:
         raise HTTPException(404, "not able to create post")
     return {"added": parsedData}
+
 
 @router.get("/ids")
 def get_post():
@@ -79,31 +72,31 @@ def get_post():
     logger.info(ids)
     return {"postsIds": ids}
 
+
 @router.get("/my", response_model=List[PostResponseModel])
 def get_my_posts(
     token_data: Annotated[TokenData, Depends(get_current_user)],
     limit: int = 10,
     offset: int = 0,
     search_title: Optional[str] = "",
-    ) -> List[PostRead]:
+) -> List[PostRead]:
     logger.info(f"getting user's posts for {token_data.user_id}")
     posts = PostCrud(userPostController).get_post_by_user(
-        token_data.user_id,
-        limit,
-        offset,
-        search_title
-        )
+        token_data.user_id, limit, offset, search_title
+    )
     if not posts:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="not post found for user")
     return posts
+
 
 @router.get("/{id}", response_model=PostResponseModel)
 def get_post_id(id: int):
     logger.info(f"retriving id {id}")
     post = PostCrud(userPostController).getPostById(id)
-    if not post: 
+    if not post:
         raise HTTPException(404, detail=f"post id: {id} not found")
     return post
+
 
 @router.delete("/{id}")
 def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_user)]):
@@ -116,16 +109,20 @@ def delete_post(id: int, token_data: Annotated[TokenData, Depends(get_current_us
         raise HTTPException(404, detail=f"post id {id} not found")
     return {"deleted": deleted}
 
+
 @router.put("/{post_id}")
-def update_post(post_id: int, post: dict, as_user: Annotated[TokenData, Depends(get_current_user)]):
+def update_post(
+    post_id: int, post: dict, as_user: Annotated[TokenData, Depends(get_current_user)]
+):
     logger.info(f"updating post {post_id} with data {post} as user {as_user.user_id}")
-    if not id: 
+    if not id:
         raise HTTPException(404, detail=f"post id: {post_id} not passed")
     try:
-        updated = PostCrud(userPostController).update(post_id, post, int(as_user.user_id))
+        updated = PostCrud(userPostController).update(
+            post_id, post, int(as_user.user_id)
+        )
     except UpdatePostException as e:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, e.message)
     if not updated:
-         raise HTTPException(404, detail=f"post id: {id} not found")
+        raise HTTPException(404, detail=f"post id: {id} not found")
     return {"updated": updated}
-
