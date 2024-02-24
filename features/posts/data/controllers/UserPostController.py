@@ -9,13 +9,13 @@ from features.posts.domain.controllers.PostsController import PostController
 from core.utils.MyUtils import MyUtils
 from features.posts.domain.entities.Post import PostCreate, PostRead
 
+
 class UserPostController(PostController):
-
-    def __init__(self, 
-    localDS: PostsLocalDataSource,
-    postgresDS: PostsPostgresDS,
-    alchemyDS: PostsAlchemyDS
-
+    def __init__(
+        self,
+        localDS: PostsLocalDataSource,
+        postgresDS: PostsPostgresDS,
+        alchemyDS: PostsAlchemyDS,
     ) -> None:
         self.localDS = localDS
         self.postgresDS = postgresDS
@@ -28,39 +28,35 @@ class UserPostController(PostController):
             self.activeDS = alchemyDS
         elif postgresDS.isAvailable():
             self.logger.info("using POSTGRES DS")
-            self.activeDS = postgresDS 
+            self.activeDS = postgresDS
         elif localDS.isAvailable():
             self.logger.info("using LOCALDB")
             self.activeDS = localDS
         self.logger.info("userPostController initialized")
 
-    def getPosts(self,
-                limit: int,
-                offset: int,
-                search_titel: Optional[str]) -> Optional[list[PostRead]]:
-        posts = self.activeDS.getPosts(limit, offset, search_titel)
+    def getPosts(
+        self, limit: int, offset: int, search_title: Optional[str]
+    ) -> Optional[list[PostRead]]:
+        posts = self.activeDS.getPosts(limit, offset, search_title)
         return posts
 
-    def dumpPosts(self,posts: list[PostCreate]):
+    def dumpPosts(self, posts: list[PostCreate]):
         self.activeDS.dumpPosts(posts)
 
-    def getPost(self,id: int) -> PostRead:
+    def getPost(self, id: int) -> PostRead:
         post = self.activeDS.getPost(id)
         return post
 
-    def createPost(self,post: PostCreateModel) -> bool:
+    def createPost(self, post: PostCreateModel) -> bool:
         return self.activeDS.createPost(post)
-   
-    def updatePost(self,id: int, post: dict, as_user: int) -> bool:
+
+    def updatePost(self, id: int, post: dict, as_user: int) -> bool:
         return self.activeDS.updatePost(id, post, as_user)
 
-    def deletePost(self,postId: int, as_user: int ) -> Optional[PostModel]:
+    def deletePost(self, postId: int, as_user: int) -> Optional[PostModel]:
         return self.activeDS.deletePost(postId, as_user)
-    
-    def get_post_by_user(self,
-                        as_user: int,
-                        limit: int,
-                        offset: int,
-                        search_titel: Optional[str]) -> List[PostRead]:
-        return self.activeDS.getPostByUser(as_user, limit, offset, search_titel)
 
+    def get_post_by_user(
+        self, as_user: int, limit: int, offset: int, search_titel: Optional[str]
+    ) -> List[PostRead]:
+        return self.activeDS.getPostByUser(as_user, limit, offset, search_titel)
