@@ -8,28 +8,28 @@ from features.posts.domain.entities.Post import PostCreate, PostRead
 class PostController(ABC):
     @abstractmethod
     def getPosts(
-        self, limit: int, offset: int, search_title: Optional[str]
+        limit: int, offset: int, search_title: Optional[str]
     ) -> Optional[List[PostModel]]:
         pass
 
     @abstractmethod
-    def dumpPosts(self, posts: List[PostCreate]):
+    def dumpPosts(posts: List[PostCreate]):
         pass
 
     @abstractmethod
-    def getPost(self, id: int) -> PostRead:
+    def getPost(id: int) -> PostRead:
         pass
 
     @abstractmethod
-    def createPost(self, post: PostCreateModel) -> bool:
+    def createPost(post: PostCreateModel) -> bool:
         pass
 
     @abstractmethod
-    def updatePost(self, id: int, post: dict, as_user: int) -> bool:
+    def updatePost(id: int, post: dict, as_user: int) -> bool:
         pass
 
     @abstractmethod
-    def deletePost(self, postId: int, as_user: int) -> Optional[PostModel]:
+    def deletePost(postId: int, as_user: int) -> Optional[PostModel]:
         pass
 
     @classmethod
