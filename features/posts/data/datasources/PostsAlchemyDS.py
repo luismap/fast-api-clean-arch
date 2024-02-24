@@ -1,4 +1,3 @@
-
 from tkinter import SE
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -17,8 +16,8 @@ from core.db.AlchemySql import Base, SqlAlchemyAccessLayer
 
 # Dependency
 
+
 class PostsAlchemyDS(DataSource):
-    
     def __init__(self, postgres_conn: PostgresConn) -> None:
         self.sqlal = SqlAlchemyAccessLayer(postgres_conn.get_uri_conn())
         Base.metadata.create_all(bind=self.sqlal.engine)
@@ -29,20 +28,20 @@ class PostsAlchemyDS(DataSource):
     def isAvailable(self) -> bool:
         return True
 
-    def getPosts(self,
-                limit: int,
-                offset: int,
-                search_titel: Optional[str]
-                ) -> List[PostRead]:
+    def getPosts(
+        self, limit: int, offset: int, search_titel: Optional[str]
+    ) -> List[PostRead]:
         with self.SessionLocal() as session:
-            posts = session.query(PostsAlmy)\
-                .filter(PostsAlmy.title.contains(search_titel))\
-                .limit(limit)\
-                .offset(offset)\
+            posts = (
+                session.query(PostsAlmy)
+                .filter(PostsAlmy.title.contains(search_titel))
+                .limit(limit)
+                .offset(offset)
                 .all()
+            )
         return posts
 
-    def getPost(self,userId: int) -> Optional[PostRead]:
+    def getPost(self, userId: int) -> Optional[PostRead]:
         with self.SessionLocal() as session:
             post = session.query(PostsAlmy).filter(PostsAlmy.id == userId).first()
         return post
@@ -50,7 +49,7 @@ class PostsAlchemyDS(DataSource):
     def dumpPosts(posts: list[PostCreate]):
         pass
 
-    def createPost(self,post: PostCreateModel) -> bool:
+    def createPost(self, post: PostCreateModel) -> bool:
         ans = True
         with self.SessionLocal() as session:
             try:
@@ -71,13 +70,14 @@ class PostsAlchemyDS(DataSource):
 
         if not user_posts:
             raise UpdatePostException(id)
-        
+
         with self.SessionLocal() as session:
             try:
-                update = session\
-                    .query(PostsAlmy)\
-                    .filter(PostsAlmy.id == id, PostsAlmy.user_id == as_user)\
-                    .update(post,synchronize_session="fetch") 
+                update = (
+                    session.query(PostsAlmy)
+                    .filter(PostsAlmy.id == id, PostsAlmy.user_id == as_user)
+                    .update(post, synchronize_session="fetch")
+                )
                 self.logger.info(f"updating for {update}")
                 session.commit()
                 if update:
@@ -86,10 +86,10 @@ class PostsAlchemyDS(DataSource):
                 self.logger.info(e)
         return ans
 
-    def deletePost(self, postId: int, as_user: int ) -> Optional[PostModel]:
+    def deletePost(self, postId: int, as_user: int) -> Optional[PostModel]:
         with self.SessionLocal() as session:
             postDel = self.getPost(postId)
-            if postDel:#if not None
+            if postDel:  # if not None
                 if postDel.user_id == as_user:
                     self.logger.info(f"deleting {postDel}")
                     session.delete(postDel)
@@ -97,23 +97,22 @@ class PostsAlchemyDS(DataSource):
                 else:
                     raise DeletePostException(postId)
         return postDel
-    
-    def getPostByUser(self,
-                    user_id: int,
-                    limit: int,
-                    offset: int,
-                    search_titel: Optional[str]) -> List[PostRead]:
+
+    def getPostByUser(
+        self, user_id: int, limit: int, offset: int, search_titel: Optional[str]
+    ) -> List[PostRead]:
         with self.SessionLocal() as session:
-            posts = session.query(PostsAlmy)\
-            .filter(
-                PostsAlmy.user_id == user_id,
-                PostsAlmy.title.contains(search_titel))\
-            .limit(limit)\
-            .offset(offset)\
-            .all()
+            posts = (
+                session.query(PostsAlmy)
+                .filter(
+                    PostsAlmy.user_id == user_id, PostsAlmy.title.contains(search_titel)
+                )
+                .limit(limit)
+                .offset(offset)
+                .all()
+            )
         return posts
-    
-            
+
 
 """
 
