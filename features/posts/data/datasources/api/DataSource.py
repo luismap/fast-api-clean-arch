@@ -11,7 +11,9 @@ class DataSource(ABC):
         pass
 
     @classmethod
-    def getPosts(self, limit: int, offset: int) -> Optional[list[PostRead]]:
+    def getPosts(
+        self, limit: int, offset: int, search_title: Optional[str]
+    ) -> Optional[list[PostRead]]:
         pass
 
     @classmethod
