@@ -31,7 +31,7 @@ class PostCrud:
         return data
 
     def getPostsIds(self) -> Optional[list[int]]:
-        data = self.postController.getPosts(limit=0, offset=0)
+        data = self.postController.getPosts(limit=10, offset=0, search_title="")
         if data:
             return [e.id for e in data]
         else:
