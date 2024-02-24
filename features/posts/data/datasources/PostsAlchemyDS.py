@@ -29,12 +29,12 @@ class PostsAlchemyDS(DataSource):
         return True
 
     def getPosts(
-        self, limit: int, offset: int, search_titel: Optional[str]
+        self, limit: int, offset: int, search_title: Optional[str]
     ) -> List[PostRead]:
         with self.SessionLocal() as session:
             posts = (
                 session.query(PostsAlmy)
-                .filter(PostsAlmy.title.contains(search_titel))
+                .filter(PostsAlmy.title.contains(search_title))
                 .limit(limit)
                 .offset(offset)
                 .all()
