@@ -21,9 +21,9 @@ class PostCrud:
         return self.postController.deletePost(id, as_user)
 
     def getPosts(
-        self, limit: int, offset: int, search_titel: Optional[str]
+        self, limit: int, offset: int, search_title: Optional[str]
     ) -> Optional[List[PostModel]]:
-        return self.postController.getPosts(limit, offset, search_titel)
+        return self.postController.getPosts(limit, offset, search_title)
 
     def getPostById(self, id: int) -> PostRead:
         data = self.postController.getPost(id)
@@ -31,7 +31,7 @@ class PostCrud:
         return data
 
     def getPostsIds(self) -> Optional[list[int]]:
-        data = self.postController.getPosts()
+        data = self.postController.getPosts(limit=0, offset=0)
         if data:
             return [e.id for e in data]
         else:
