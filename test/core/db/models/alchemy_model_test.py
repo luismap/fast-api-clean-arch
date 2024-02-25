@@ -17,7 +17,9 @@ with open("test/local_db_test_data.json", "r") as f:
 @pytest.fixture
 def setup():
     with sqlal.engine.connect() as conn:
-        conn.execute("attach 'fast_api' as fast_api")
+        # https://www.sqlite.org/inmemorydb.html
+        # by passing empty string, we create ephemeral db
+        conn.execute("attach '' as fast_api")
 
     Base.metadata.create_all(bind=sqlal.engine)
     return sqlal.SessionLocal()
@@ -31,6 +33,7 @@ def teardown(setup):
 def test_model_is_save(setup):
     session = setup
     row = PostsAlmy(**PostCreateModel(**local_data[0]).dict())
+    session.add(row)
     session.commit()
     data = session.query(PostsAlmy).first()
     # row.content = "new content"
