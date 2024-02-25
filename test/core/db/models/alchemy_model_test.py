@@ -8,7 +8,7 @@ from features.posts.data.models.PostCreateModel import PostCreateModel
 from features.posts.data.models.PostModel import PostModel
 
 sqlal = SqlAlchemyAccessLayer("sqlite:///")
-sqlal.engine.connect()
+# sqlal.engine.connect()
 
 with open("test/local_db_test_data.json", "r") as f:
     local_data = json.load(f)["data"]
