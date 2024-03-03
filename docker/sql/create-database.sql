@@ -36,11 +36,6 @@ CREATE INDEX IF NOT EXISTS ix_fast_api_user_user_id
     (user_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
-INSERT INTO fast_api.user (email, password)
-VALUES
-('luis@gmail.com','$2b$12$R/0WtC6JWjmjYxrr4NOLaOw5tvSPEWDAn1D/J5czuUULsSvNeeQWK'),
-('anna@gmail.com','$2b$12$sE3gj6Drk5C5Ttey9QB2ZuUhLa/49ScDKTh66fqU.QUtsclpuPPTS'),
-('seb@gmail.com','$2b$12$JdtLVHQDtr4IyvsL2aYWsOTzVwViS7T3odiiJSC99ir/L584ff/CK');
 
 
 --PRODUCTS SECTION
@@ -70,16 +65,6 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS fast_api.products
     OWNER to admin;
 
-INSERT INTO FAST_API.PRODUCTS ("name",PRICE,INVENTORY,IS_SALE)
-VALUES ('socks',20, 10, TRUE),
-('tennis racket',10, 2, FALSE),
-('remote controller', 5, 3, TRUE),
-('pencil', 3, 3, FALSE),
-('dictionaries',20, 5, FALSE),
-('blockets',20, 5, FALSE),
-('wine bottles',20, 5, FALSE),
-('magazines',20, 5, FALSE),
-('mobile', 34, 21, FALSE);
 
 --POST SECTION
 
@@ -115,12 +100,6 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS fast_api.posts
     OWNER to admin;
 
-INSERT INTO FAST_API.posts (title, content, user_id)
-VALUES
-('ml', 'is very important machine learning',1),
-('medicine', 'about the new content in placebo effect',2),
-('robotics', 'the new down of AI',3);
-
 --votes section
 CREATE TABLE IF NOT EXISTS fast_api.votes
 (
@@ -140,6 +119,30 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS fast_api.votes
     OWNER to admin;
+
+--DATA SECTION
+INSERT INTO FAST_API.PRODUCTS ("name",PRICE,INVENTORY,IS_SALE)
+VALUES ('socks',20, 10, TRUE),
+('tennis racket',10, 2, FALSE),
+('remote controller', 5, 3, TRUE),
+('pencil', 3, 3, FALSE),
+('dictionaries',20, 5, FALSE),
+('blockets',20, 5, FALSE),
+('wine bottles',20, 5, FALSE),
+('magazines',20, 5, FALSE),
+('mobile', 34, 21, FALSE);
+
+INSERT INTO fast_api.user (email, password)
+VALUES
+('luis@gmail.com','$2b$12$R/0WtC6JWjmjYxrr4NOLaOw5tvSPEWDAn1D/J5czuUULsSvNeeQWK'),
+('anna@gmail.com','$2b$12$sE3gj6Drk5C5Ttey9QB2ZuUhLa/49ScDKTh66fqU.QUtsclpuPPTS'),
+('seb@gmail.com','$2b$12$JdtLVHQDtr4IyvsL2aYWsOTzVwViS7T3odiiJSC99ir/L584ff/CK');
+
+INSERT INTO FAST_API.posts (title, content, user_id)
+VALUES
+('ml', 'is very important machine learning',1),
+('medicine', 'about the new content in placebo effect',2),
+('robotics', 'the new down of AI',3);
 
 INSERT INTO fast_api.votes(post_id, user_id)
 	VALUES 
