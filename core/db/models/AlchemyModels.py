@@ -52,3 +52,15 @@ class Votes(Base):
     post_id = Column(
         Integer, ForeignKey("fast_api.posts.id", onupdate="CASCADE"), primary_key=True
     )
+
+
+class ProductsAlmy(Base):
+    __tablename__ = "products"
+    __table_args__ = {"schema": "fast_api"}
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    price = Column(Integer, nullable=False)
+    name = Column(String, nullable=False)
+    is_sale = Column(Boolean, server_default="false")
+    inventory = Column(Integer, server_default="0")
+    created_at = Column(TIMESTAMP, server_default=func.now())
