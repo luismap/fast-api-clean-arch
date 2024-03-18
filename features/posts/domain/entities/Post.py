@@ -51,6 +51,7 @@ class PostRead(PostBase):
     tell the Pydantic model to read the data even if it is not a dict, 
     but an ORM model (or any other arbitrary object with attributes)
     """
+    votes: int = 0  # just adding it here for simplicity, needs to be refactor
 
     class Config:
         orm_mode = True

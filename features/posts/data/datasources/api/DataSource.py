@@ -10,7 +10,7 @@ class DataSource(ABC):
         pass
 
     @abstractmethod
-    def get_post_votes(post: List[PostReadModel]):
+    def get_post_votes(post: List[PostReadModel]) -> List[PostReadModel]:
         pass
 
     @abstractmethod

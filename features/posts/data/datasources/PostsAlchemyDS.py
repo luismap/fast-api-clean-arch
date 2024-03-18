@@ -1,8 +1,8 @@
 from tkinter import SE
 from typing import List, Optional
-from sqlalchemy.orm import Session
+import sqlalchemy.sql.functions as func
 from core.db.Postgres import PostgresConn
-from core.db.models.AlchemyModels import PostsAlmy
+from core.db.models.AlchemyModels import PostsAlmy, Votes
 from core.failures.MyExeptions import DeletePostException, UpdatePostException
 from core.utils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
@@ -28,8 +28,20 @@ class PostsAlchemyDS(DataSource):
     def isAvailable(self) -> bool:
         return True
 
-    def get_post_votes(post: List[PostReadModel]):
-        pass
+    def get_post_votes(self, post: List[PostReadModel]) -> List[PostReadModel]:
+        posts = []
+        with self.SessionLocal() as session:
+            for p in post:
+                row = (
+                    session.query(func.count(Votes.post_id))
+                    .filter(Votes.post_id == p.id)
+                    .scalar()
+                )
+                print(row)
+                p.votes = row
+                posts.append(p)
+
+        return posts
 
     def getPosts(
         self, limit: int, offset: int, search_title: Optional[str]
@@ -42,6 +54,8 @@ class PostsAlchemyDS(DataSource):
                 .offset(offset)
                 .all()
             )
+
+        posts = self.get_post_votes(posts)
         return posts
 
     def getPost(self, userId: int) -> Optional[PostReadModel]:
