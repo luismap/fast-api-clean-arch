@@ -1,41 +1,44 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import List, Optional
 from features.posts.data.models.PostCreateModel import PostCreateModel
-from features.posts.data.models.PostModel import PostModel
-from features.posts.domain.entities.Post import PostCreate, PostRead
+from features.posts.data.models.PostModel import PostModel, PostReadModel
 
 
 class DataSource(ABC):
-    @classmethod
-    def isAvailable(self) -> bool:
+    @abstractmethod
+    def isAvailable() -> bool:
         pass
 
-    @classmethod
+    @abstractmethod
+    def get_post_votes(post: List[PostReadModel]):
+        pass
+
+    @abstractmethod
     def getPosts(
-        self, limit: int, offset: int, search_title: Optional[str]
-    ) -> Optional[list[PostRead]]:
+        limit: int, offset: int, search_title: Optional[str]
+    ) -> Optional[list[PostReadModel]]:
         pass
 
-    @classmethod
-    def dumpPosts(self, posts: list[PostCreateModel]):
+    @abstractmethod
+    def dumpPosts(posts: list[PostCreateModel]):
         pass
 
-    @classmethod
-    def getPost(self, id: int) -> Optional[PostRead]:
+    @abstractmethod
+    def getPost(id: int) -> Optional[PostReadModel]:
         pass
 
-    @classmethod
-    def createPost(self, post: PostCreateModel) -> bool:
+    @abstractmethod
+    def createPost(post: PostCreateModel) -> bool:
         pass
 
-    @classmethod
-    def updatePost(self, id: int, post: dict, as_user: int) -> bool:
+    @abstractmethod
+    def updatePost(id: int, post: dict, as_user: int) -> bool:
         pass
 
-    @classmethod
-    def deletePost(self, postId: int, as_user: int) -> Optional[PostModel]:
+    @abstractmethod
+    def deletePost(postId: int, as_user: int) -> Optional[PostModel]:
         pass
 
-    @classmethod
-    def getPostByUser(user_id: int, limit: int, offset: int) -> list[PostRead]:
+    @abstractmethod
+    def getPostByUser(user_id: int, limit: int, offset: int) -> list[PostReadModel]:
         pass

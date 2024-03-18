@@ -1,10 +1,8 @@
-
-
 import logging
-from typing import Optional
+from typing import List, Optional
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
-from features.posts.data.models.PostModel import PostModel
+from features.posts.data.models.PostModel import PostModel, PostReadModel
 from core.db.Postgres import PostgresConn
 import psycopg
 from psycopg.rows import dict_row
@@ -13,8 +11,8 @@ import yaml
 
 from features.posts.domain.entities.Post import PostCreate
 
-class PostsPostgresDS(DataSource):
 
+class PostsPostgresDS(DataSource):
     def __init__(self) -> None:
         self.logger = logging.getLogger("api_dev")
         self.logger.info("postPostgresDS initialized")
@@ -23,6 +21,9 @@ class PostsPostgresDS(DataSource):
         self.db = properties["db"]
         self.table = properties["table"]
         self.connParams = self.postgresConn.get_conn_params()
+
+    def get_post_votes(post: List[PostReadModel]):
+        return super().get_post_votes()
 
     def isAvailable(self) -> bool:
         try:
@@ -39,7 +40,7 @@ class PostsPostgresDS(DataSource):
                 cur.execute(f"select * from {self.db}.{self.table}")
                 data = cur.fetchall()
                 return [PostModel(**e) for e in data]
-    
+
     def dumpPosts(posts: list[PostCreate]):
         pass
 
@@ -59,19 +60,20 @@ class PostsPostgresDS(DataSource):
                 return PostModel(**row)
 
     def createPost(self, post: PostCreate) -> bool:
-        #tbe with correct boolean logic
+        # tbe with correct boolean logic
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
-                cur.execute(f"""
+                cur.execute(
+                    f"""
                 INSERT INTO {self.db}.{self.table} (title, content, published, rating)
                 values(%s,%s,%s,%s)
-                """,(post.title, post.content, post.published, post.rating))
+                """,
+                    (post.title, post.content, post.published, post.rating),
+                )
 
         return True
 
-        
-
-    def updatePost(self,id: int, post: dict) -> bool:
+    def updatePost(self, id: int, post: dict) -> bool:
         lookedPost = self.getPost(id)
         if lookedPost == None:
             return False
@@ -80,27 +82,41 @@ class PostsPostgresDS(DataSource):
 
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
-                cur.execute(f"""
+                cur.execute(
+                    f"""
                 UPDATE {self.db}.{self.table}
                 SET title= %s, content = %s, published= %s, rating = %s
                 WHERE id = {id}
-                """,(lookedPost.title, lookedPost.content, lookedPost.published, lookedPost.rating))
+                """,
+                    (
+                        lookedPost.title,
+                        lookedPost.content,
+                        lookedPost.published,
+                        lookedPost.rating,
+                    ),
+                )
 
         return True
 
-    def deletePost(self, postId: int ) -> Optional[PostModel]:
+    def deletePost(self, postId: int) -> Optional[PostModel]:
         with psycopg.connect(**self.connParams, row_factory=dict_row) as conn:
             with conn.cursor() as cur:
-                post = self.getPost(postId) #check post exists
+                post = self.getPost(postId)  # check post exists
                 if post:
-                    cur.execute(f"""
+                    cur.execute(
+                        f"""
                         DELETE FROM {self.db}.{self.table}
                         WHERE id = %s
-                        """,(postId,))
+                        """,
+                        (postId,),
+                    )
                 else:
                     return False
                 self.logger.info(f"[deleting] post {post}")
-        uPost = self.getPost(postId) #check post deleted
+        uPost = self.getPost(postId)  # check post deleted
         if uPost == None:
             return post
         return None
+
+    def getPostByUser(user_id: int, limit: int, offset: int) -> List[PostReadModel]:
+        pass

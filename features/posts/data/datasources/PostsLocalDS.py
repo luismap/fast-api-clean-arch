@@ -1,12 +1,12 @@
 import logging
-from typing import Optional
+from typing import List, Optional
 from core.db.LocalStore import LocalStore
 from core.failures.MyExeptions import CreatePostError
 from core.utils.MyUtils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostCreateModel import PostCreateModel
-from features.posts.data.models.PostModel import PostModel
-from features.posts.domain.entities.Post import PostCreate
+from features.posts.data.models.PostModel import PostModel, PostReadModel
+
 
 class PostsLocalDataSource(DataSource):
     def __init__(self) -> None:
@@ -17,7 +17,10 @@ class PostsLocalDataSource(DataSource):
         self.postFile = self.localDb["dbFileName"]
         self.logger.info(f"{self.postFile}")
         self.localStore = LocalStore()
-    
+
+    def get_post_votes(post: List[PostReadModel]):
+        pass
+
     def isAvailable(self) -> bool:
         isA = self.localStore.isAvailable(self.postFile)
         self.logger.info(f"is local Db available {isA}")
@@ -32,14 +35,14 @@ class PostsLocalDataSource(DataSource):
         else:
             return None
 
-    def dumpPosts(self,posts: list[PostCreateModel]):
+    def dumpPosts(self, posts: list[PostCreateModel]):
         data = [e.dict() for e in posts]
-        f = lambda e : e.update({'created_at': str(e['created_at'])})
-        list(map((f),data))
+        f = lambda e: e.update({"created_at": str(e["created_at"])})
+        list(map((f), data))
         self.logger.info(f"data to dump {data}")
         self.localStore.dumpLocalData(self.postFile, data)
 
-    def getPost(self,id: int) -> Optional[PostModel]:
+    def getPost(self, id: int) -> Optional[PostModel]:
         """given an id, get post from local datasource
         Args:
             id (int): id
@@ -50,17 +53,17 @@ class PostsLocalDataSource(DataSource):
         localPosts = self.getPosts()
         if localPosts:
             post = list(filter(lambda p: p.id == id, localPosts))
-            return post[0] if post else None 
+            return post[0] if post else None
         else:
             return None
 
-    def createPost(self,payload: PostCreateModel) -> bool:
+    def createPost(self, payload: PostCreateModel) -> bool:
         try:
             posts = []
             tmp_posts = self.getPosts()
             if tmp_posts:
                 posts = [PostCreateModel(**e.dict()) for e in tmp_posts]
-                ids = map(lambda e: e if e else 0,[e.id for e in posts])
+                ids = map(lambda e: e if e else 0, [e.id for e in posts])
                 newId = max(ids) + 1
             else:
                 newId = 1
@@ -72,9 +75,9 @@ class PostsLocalDataSource(DataSource):
         except:
             raise CreatePostError("error creating post")
 
-    def updatePost(self,id: int, post: dict) -> bool:
+    def updatePost(self, id: int, post: dict) -> bool:
         posts = self.getPosts()
-        toUpdate = [i for i,p in enumerate(posts) if p.id == id]
+        toUpdate = [i for i, p in enumerate(posts) if p.id == id]
 
         for i in toUpdate:
             posts[i].update(post)
@@ -82,9 +85,9 @@ class PostsLocalDataSource(DataSource):
         self.dumpPosts(posts)
         return True if len(toUpdate) > 0 else False
 
-    def deletePost(self,postId: int ) -> Optional[PostModel]:
+    def deletePost(self, postId: int) -> Optional[PostModel]:
         posts = self.getPosts()
-        postIdx = [i for i,p in enumerate(posts) if p.id == postId]
+        postIdx = [i for i, p in enumerate(posts) if p.id == postId]
         if len(postIdx) > 1:
             raise Exception(f"non unique post")
         if len(postIdx) == 1:
@@ -92,5 +95,8 @@ class PostsLocalDataSource(DataSource):
             self.dumpPosts(posts)
         else:
             deletedPost = None
- 
+
         return deletedPost
+
+    def getPostByUser(user_id: int, limit: int, offset: int) -> List[PostReadModel]:
+        pass

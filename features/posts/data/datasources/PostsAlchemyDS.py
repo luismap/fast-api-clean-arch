@@ -7,7 +7,7 @@ from core.failures.MyExeptions import DeletePostException, UpdatePostException
 from core.utils import MyUtils
 from features.posts.data.datasources.api.DataSource import DataSource
 from features.posts.data.models.PostCreateModel import PostCreateModel
-from features.posts.data.models.PostModel import PostModel
+from features.posts.data.models.PostModel import PostModel, PostReadModel
 from fastapi import Depends
 from features.posts.domain.entities.Post import PostCreate, PostRead
 import logging
@@ -28,9 +28,12 @@ class PostsAlchemyDS(DataSource):
     def isAvailable(self) -> bool:
         return True
 
+    def get_post_votes(post: List[PostReadModel]):
+        pass
+
     def getPosts(
         self, limit: int, offset: int, search_title: Optional[str]
-    ) -> List[PostRead]:
+    ) -> List[PostReadModel]:
         with self.SessionLocal() as session:
             posts = (
                 session.query(PostsAlmy)
@@ -41,7 +44,7 @@ class PostsAlchemyDS(DataSource):
             )
         return posts
 
-    def getPost(self, userId: int) -> Optional[PostRead]:
+    def getPost(self, userId: int) -> Optional[PostReadModel]:
         with self.SessionLocal() as session:
             post = session.query(PostsAlmy).filter(PostsAlmy.id == userId).first()
         return post
@@ -100,7 +103,7 @@ class PostsAlchemyDS(DataSource):
 
     def getPostByUser(
         self, user_id: int, limit: int, offset: int, search_titel: Optional[str]
-    ) -> List[PostRead]:
+    ) -> List[PostReadModel]:
         with self.SessionLocal() as session:
             posts = (
                 session.query(PostsAlmy)

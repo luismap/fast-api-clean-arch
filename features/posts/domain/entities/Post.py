@@ -69,7 +69,7 @@ class PostResponse(BaseModel):
     # published: bool = False
     # rating: Optional[int] = None
     # created_at: datetime = datetime.now()
-    votes: int
+    votes: int = 0
 
     class Config:
         orm_mode = True
